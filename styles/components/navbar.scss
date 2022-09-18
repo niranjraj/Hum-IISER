@@ -1,0 +1,93 @@
+.navbar-wrapper {
+  height: 70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.navbar {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 1rem;
+  color: #ffffff;
+  font-family: "Montserrat";
+}
+.nav-item-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  & a {
+    padding: 0 2em;
+    transition: color 150ms linear;
+  }
+  & a:hover {
+    color: #b6272b;
+  }
+}
+
+.login-button {
+  padding: 0.5em 2em;
+  background-color: #5b628b;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  border: 1px solid darken(#5b628b, 4%);
+  box-shadow: 0px 2px 0 darken(#5b628b, 5%), 2px 4px 6px darken(#5b628b, 2%);
+  transition: all 150ms linear;
+  &:hover {
+    background: darken(#5b628b, 1.5%);
+    border: 1px solid rgba(#000, 0.05);
+    box-shadow: 1px 1px 2px rgba(#fff, 0.2);
+    color: #b6272b;
+    text-decoration: none;
+    transition: all 250ms linear;
+  }
+}
+
+.ast-arrow-svg {
+  & path {
+    fill: #ffffff;
+    transition: all 250ms linear;
+  }
+}
+
+.service-item:hover {
+  & > a {
+    color: #b6272b;
+  }
+  .ast-arrow-svg path {
+    fill: #b6272b;
+  }
+}
+
+.service-item {
+  position: relative;
+}
+.sub-menu {
+  position: absolute;
+  opacity: 0;
+  top: 150%;
+  left: 0;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid darken(#5b628b, 4%);
+  box-shadow: 0px 2px 0 darken(#5b628b, 5%), 2px 4px 6px darken(#5b628b, 2%);
+  transition: all 150ms linear;
+  & li {
+    padding: 1em 0;
+    width: 100%;
+  }
+  & a {
+    width: 100%;
+  }
+}
+
+.service-item:hover .sub-menu {
+  opacity: 1;
+}
