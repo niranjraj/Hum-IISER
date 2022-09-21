@@ -1,15 +1,16 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+
 import Greeter from "../components/Greeter";
+import Info from "../components/Info";
 import Navbar from "../components/Navbar";
+import MainContainer from "../layout/MainContainer";
 
 const Home: NextPage = () => {
   return (
-    <>
-      <Navbar />
+    <MainContainer>
       <Greeter />
-    </>
+      <Info />
+    </MainContainer>
   );
 };
 

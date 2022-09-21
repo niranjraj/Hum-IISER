@@ -1,0 +1,26 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-content-wrapper {
+  height: 300px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  & h2 {
+    text-align: center;
+    padding: 1em 0;
+  }
+}
+
+.google-btn {
+  color: cadetblue;
+  padding: 1em 2em;
+}

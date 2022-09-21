@@ -1,0 +1,35 @@
+.greeter-container {
+  margin: 0 6em;
+  padding-top: 2em;
+  display: flex;
+  height: 100%;
+}
+
+.greeter-text {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.greeter-header {
+  font-size: 5vw;
+
+  line-height: 1em;
+  color: #1c1e2b;
+
+  & span {
+    color: #b6272b;
+  }
+}
+
+.greeter-tagline {
+  padding-top: 2em;
+  color: #282b3f;
+  font-size: 1.2rem;
+  font-family: "Montserrat-Light";
+}
+.greeter-img-wrapper {
+  position: relative;
+  z-index: 1;
+}

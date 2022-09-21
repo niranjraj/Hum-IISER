@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signIn, signOut, useSession } from "next-auth/react";
 const Navbar = () => {
+  const { data: session, status } = useSession();
+  const [menu, setMenu] = useState(false);
+
   return (
     <div className="navbar-wrapper">
       <div className="navbar">
@@ -20,24 +24,23 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="service-item">
-            <Link href="#">
-              <a>
-                Services{" "}
-                <svg
-                  className="ast-arrow-svg"
-                  xmlns="http://www.w3.org/2000/svg"
-                  version="1.1"
-                  x="0px"
-                  y="0px"
-                  width="10px"
-                  height="10px"
-                  viewBox="57 35.171 26 16.043"
-                  enableBackground="new 57 35.171 26 16.043"
-                >
-                  <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z"></path>
-                </svg>
-              </a>
-            </Link>
+            <div className="service-item-text">
+              Services
+              <svg
+                className="ast-arrow-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                version="1.1"
+                x="0px"
+                y="0px"
+                width="10px"
+                height="10px"
+                viewBox="57 35.171 26 16.043"
+                enableBackground="new 57 35.171 26 16.043"
+              >
+                <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z"></path>
+              </svg>
+            </div>
+
             <ul className="sub-menu">
               <li>
                 <Link href="#">Home Services</Link>
@@ -60,9 +63,41 @@ const Navbar = () => {
           </li>
         </ul>
         <div className="nav-login">
-          <Link href="#">
-            <a className="login-button">Login</a>
-          </Link>
+          {status === "unauthenticated" && (
+            <button
+              className="login-button"
+              onClick={() =>
+                signIn(process.env.GOOGLE_ID, {
+                  callbackUrl: `${window.location.origin}/account`,
+                })
+              }
+            >
+              Login
+            </button>
+          )}
+          {status === "authenticated" && session && (
+            <div
+              style={{ backgroundImage: `url(${session.user?.image})` }}
+              className="profile-icon"
+              onClick={() => setMenu((prev) => !prev)}
+            >
+              {menu && (
+                <ul className="user-panel">
+                  <li>
+                    <Link href="#">Home</Link>
+                  </li>
+                  <li>
+                    <Link href="#">Delivery Services</Link>
+                  </li>
+                  <li>
+                    <button className="logout-btn" onClick={() => signOut()}>
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
