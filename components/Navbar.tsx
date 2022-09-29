@@ -1,10 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
+import profilePic from "../public/static/default.jpg";
+import { redirect } from "next/dist/server/api-utils";
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [menu, setMenu] = useState(false);
+  const menuRef = useRef<HTMLUListElement | null>(null);
+  const buttonRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      menuRef &&
+      buttonRef &&
+      !buttonRef.current?.contains(e.target as HTMLElement) &&
+      !menuRef.current?.contains(e.target as HTMLElement)
+    ) {
+      setMenu(false);
+    }
+  };
+
+  useEffect(() => {
+    if (menu) {
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [menu]);
 
   return (
     <div className="navbar-wrapper">
@@ -64,25 +89,23 @@ const Navbar = () => {
         </ul>
         <div className="nav-login">
           {status === "unauthenticated" && (
-            <button
-              className="login-button"
-              onClick={() =>
-                signIn(process.env.GOOGLE_ID, {
-                  callbackUrl: `${window.location.origin}/account`,
-                })
-              }
-            >
-              Login
-            </button>
+            <Link href="/login">
+              <a className="login-button">Login</a>
+            </Link>
           )}
           {status === "authenticated" && session && (
             <div
-              style={{ backgroundImage: `url(${session.user?.image})` }}
+              style={{
+                backgroundImage: `url(${
+                  session.user?.image ? session.user?.image : profilePic
+                })`,
+              }}
               className="profile-icon"
+              ref={buttonRef}
               onClick={() => setMenu((prev) => !prev)}
             >
               {menu && (
-                <ul className="user-panel">
+                <ul className="user-panel" ref={menuRef}>
                   <li>
                     <Link href="#">Home</Link>
                   </li>

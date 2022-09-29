@@ -19,5 +19,12 @@ namespace NodeJS {
     TWITTER_SECRET: string;
     DATABASE_URL: string;
     SECRET: string;
+    MONGODB_URI: string;
+    FIREBASE_API_KEY: string;
+    FIREBASE_AUTH_DOMAIN: string;
+    FIREBASE_PROJECT_ID: string;
+    FIREBASE_STORAGE_BUCKET: string;
+    FIREBASE_MESSAGING_SENDER_ID: string;
+    FIREBASE_APP_ID: string;
   }
 }
