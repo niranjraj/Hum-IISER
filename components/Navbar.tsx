@@ -107,7 +107,7 @@ const Navbar = () => {
               {menu && (
                 <ul className="user-panel" ref={menuRef}>
                   <li>
-                    <Link href="#">Home</Link>
+                    <Link href="/account">Account</Link>
                   </li>
                   <li>
                     <Link href="#">Delivery Services</Link>

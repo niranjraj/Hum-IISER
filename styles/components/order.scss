@@ -15,6 +15,7 @@ body.form-modal-open {
     font-family: "Montserrat";
   }
 }
+
 .order-page-1,
 .order-page-2,
 .order-page-3,
@@ -39,8 +40,58 @@ body.form-modal-open {
     background-color: rgb(210, 210, 224);
     border-radius: 5px;
     cursor: pointer;
+
+    position: relative;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
       rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    transition: background-color 0.3s ease-in-out;
+    & p {
+      position: absolute;
+      opacity: 0;
+      z-index: 10;
+      color: #282b3f;
+      font-family: "Montserrat-Semibold";
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1rem;
+      transition: 0.3s ease-in-out;
+    }
+    & img {
+      -webkit-filter: grayscale(0) blur(0);
+      filter: grayscale(0) blur(0);
+      -webkit-transition: 0.3s ease-in-out;
+      transition: 0.3s ease-in-out;
+    }
+  }
+  & div.active-category {
+    background-color: rgb(121, 121, 240);
+    & svg {
+      position: absolute;
+      z-index: 10;
+      height: 60px;
+      width: 60px;
+      top: 70%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    & img {
+      -webkit-filter: grayscale(100%) blur(3px);
+      filter: grayscale(100%) blur(3px);
+    }
+    & p {
+      opacity: 1;
+    }
+  }
+  & div:hover {
+    background-color: rgb(121, 121, 240);
+    & img {
+      -webkit-filter: grayscale(100%) blur(3px);
+      filter: grayscale(100%) blur(3px);
+    }
+    & p {
+      opacity: 1;
+    }
   }
 }
 
@@ -106,11 +157,13 @@ form {
   /* IMAGE STYLES */
   [type="checkbox"] + span {
     cursor: pointer;
+
+    outline: 10px solid rgb(210, 210, 224);
   }
 
   /* CHECKED STYLES */
   [type="checkbox"]:checked + span {
-    outline: 2px solid #f00;
+    outline: 10px solid rgb(102, 102, 247);
   }
 }
 .fields-wrapper {
@@ -126,16 +179,15 @@ form {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-}
-
-.restaurant-section {
   flex-wrap: wrap;
   row-gap: 1em;
+  margin-bottom: 1em;
   & label {
     flex: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 1em;
   }
 }
 
@@ -161,7 +213,7 @@ fieldset {
 
 .orderForm-item-wrapper {
   display: grid;
-  grid-template-columns: 1fr 0.75fr;
+  grid-template-columns: 1fr 1fr 0.75fr;
   gap: 1.5em 1em;
   padding-bottom: 1.5em;
   align-items: center;
@@ -175,13 +227,37 @@ fieldset {
   &:nth-child(3) {
     grid-column: 2/3;
   }
+  &:nth-child(4) {
+    grid-column: 3/4;
+  }
 }
 
+.select-wrapper {
+  & select {
+    width: 100%;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 1em;
+    background: #ffffff;
+    color: #5b628b;
+    border: 1px solid #dfe3fa;
+    font-size: 0.85rem;
+    line-height: 1.125;
+    letter-spacing: -0.25px;
+    font-weight: bold;
+  }
+  & p {
+    margin-bottom: 0.75em;
+  }
+}
 .delete-btn-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.delete-btn-wrapper,
+.select-wrapper {
   & p {
     color: #5b628b;
     font-size: 0.75rem;
@@ -231,6 +307,7 @@ fieldset {
 
 .confirm-order-wrapper {
   height: 100%;
+  padding-top: 1em;
 
   & h3 {
     padding-top: 0.5em;
@@ -276,6 +353,7 @@ fieldset {
     font-size: 1rem;
     font-weight: 700;
     color: #5b628b;
+    margin-bottom: 0.5em;
     font-family: "Montserrat-Semibold";
   }
 

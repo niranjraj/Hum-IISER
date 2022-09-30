@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
+import { Field, FieldArray, Form, Formik } from "formik";
 import Image from "next/image";
 import * as yup from "yup";
 import "yup-phone-lite";
 import Input from "./Input";
 import formErrorMsg from "../utils/errorMessage";
-
+import { BsCheckLg } from "react-icons/bs";
 const FormSchema = yup.object().shape({
   category: yup
     .array()
@@ -32,6 +32,19 @@ const FormSchema2 = yup.object().shape({
           .required("- All fields must be filled.")
           .max(9999999999, "- Quantity limit reached.")
           .min(0, "- Invalid input."),
+        store: yup
+          .string()
+          .oneOf([
+            "Nilgiris",
+            "ExoticaStore",
+            "Dominos",
+            "SupremeGourmet",
+            "PaulsCreamery",
+            "SankersCoffe",
+            "Other",
+          ])
+          .required("- Select store."),
+        // store: yup.string().required("- Select a store to continue."),
       })
     )
     .min(1, "Atleast one item must be added"),
@@ -39,6 +52,7 @@ const FormSchema2 = yup.object().shape({
 type Item = {
   name: string;
   quantity: number;
+  store: string;
 };
 interface FormValues {
   category: string[];
@@ -68,6 +82,12 @@ type OrderProps3 = {
   next: (newData: any, final?: boolean) => void;
   prev: (newData: any) => void;
 };
+type OrderProps4 = {
+  formData: FormValues;
+  preComplete: (newData: any) => void;
+  next: (newData: any, final?: boolean) => void;
+  prev: (newData: any) => void;
+};
 
 export const OrderPage1 = (props: Props1) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -85,7 +105,9 @@ export const OrderPage1 = (props: Props1) => {
       {errorMsg && <div className="validation-msg">{errorMsg}</div>}
       <div className="order-section">
         <div
-          className="supermarket-wrapper"
+          className={`supermarket-wrapper ${
+            props.initialCategory.supermarket ? "active-category" : ""
+          }`}
           onClick={() =>
             props.setCategory((prev) => ({
               ...prev,
@@ -93,15 +115,20 @@ export const OrderPage1 = (props: Props1) => {
             }))
           }
         >
+          {props.initialCategory.supermarket ? <BsCheckLg /> : null}
+          <p>Supermarket</p>
           <Image
             src="/static/supermarket.png"
             width="150"
             height="150"
+            className="supermarket-img"
             alt="supermarket"
           />
         </div>
         <div
-          className="restaurant-wrapper"
+          className={`restaurant-wrapper ${
+            props.initialCategory.restaurant ? "active-category" : ""
+          }`}
           onClick={() =>
             props.setCategory((prev) => ({
               ...prev,
@@ -109,6 +136,9 @@ export const OrderPage1 = (props: Props1) => {
             }))
           }
         >
+          {props.initialCategory.restaurant ? <BsCheckLg /> : null}
+          <p>Restaurant</p>
+
           <Image
             src="/static/restaurant.png"
             width="150"
@@ -262,6 +292,7 @@ export const OrderPage2 = (props: OrderProps2) => {
 
 export const OrderPage3 = (props: OrderProps3) => {
   const handleSubmit = (values: FormValues) => {
+    console.log(values.items);
     props.next(values);
   };
 
@@ -273,7 +304,7 @@ export const OrderPage3 = (props: OrderProps3) => {
         onSubmit={handleSubmit}
         validationSchema={FormSchema2}
       >
-        {({ values, errors }) => (
+        {({ values, errors, setFieldValue }) => (
           <Form>
             <div className="fields-wrapper">
               {errors.items &&
@@ -309,8 +340,33 @@ export const OrderPage3 = (props: OrderProps3) => {
                               <Input
                                 label="Qty."
                                 name={`items[${index}].quantity`}
+                                number={true}
                                 hideLabels={index > 0}
                               />
+                              <div className="select-wrapper">
+                                <p>Select store</p>
+                                <Field
+                                  as="select"
+                                  name={`items[${index}].store`}
+                                >
+                                  <option value="" label="Select a store">
+                                    Select a store
+                                  </option>
+                                  {Object(values.category).map(
+                                    (item: string, index: number) => {
+                                      return (
+                                        <option
+                                          key={`${item}-${index}`}
+                                          value={item}
+                                          label={item}
+                                        >
+                                          {item}
+                                        </option>
+                                      );
+                                    }
+                                  )}
+                                </Field>
+                              </div>
 
                               <div className="delete-btn-wrapper">
                                 <p>Delete Item</p>
@@ -337,6 +393,7 @@ export const OrderPage3 = (props: OrderProps3) => {
                             helpers.push({
                               name: "",
                               quantity: "",
+                              store: "",
                             });
                           }}
                         >
@@ -369,13 +426,18 @@ export const OrderPage3 = (props: OrderProps3) => {
   );
 };
 
-export const OrderPage4 = (props: OrderProps3) => {
+export const OrderPage4 = (props: OrderProps4) => {
   const [confirmOrder, setConfirmOrder] = useState(false);
+
   const handleSubmit = (values: FormValues) => {
-    setConfirmOrder(true);
     props.next(values, true);
   };
-  const handleConfirm = () => {};
+  const handlePreComplete = (values: FormValues) => {
+    console.log(values);
+
+    setConfirmOrder(true);
+    props.preComplete(values);
+  };
 
   return (
     <div className="order-page-4">
@@ -389,7 +451,7 @@ export const OrderPage4 = (props: OrderProps3) => {
         onSubmit={handleSubmit}
         validationSchema={FormSchema4}
       >
-        {({ values, errors }) => (
+        {({ values, errors, validateForm, touched }) => (
           <Form>
             {confirmOrder ? (
               <div className="confirm-order-wrapper">
@@ -404,6 +466,12 @@ export const OrderPage4 = (props: OrderProps3) => {
                             key={`${item.name}-${index}`}
                           >
                             <p>{item.name}</p>
+                            <Image
+                              src={`/static/${item.store}.png`}
+                              width="32"
+                              height="32"
+                              alt={item.store}
+                            />
                             <p>{item.quantity}</p>
                           </div>
                         );
@@ -485,7 +553,18 @@ export const OrderPage4 = (props: OrderProps3) => {
                     <button
                       className="next-step-button"
                       type="button"
-                      onClick={() => setConfirmOrder(true)}
+                      onClick={() =>
+                        validateForm().then((errormsg) => {
+                          if (
+                            !errormsg.name &&
+                            !errormsg.location &&
+                            !errormsg.phoneNumber
+                          ) {
+                            console.log(errormsg);
+                            handlePreComplete(values);
+                          }
+                        })
+                      }
                     >
                       Complete Now
                     </button>

@@ -5,9 +5,16 @@ type Props = {
   label: string;
   name: string;
   hideLabels?: boolean;
+  number?: boolean;
 };
 
-const Input = ({ label, name, hideLabels, ...props }: Props) => {
+const Input = ({
+  label,
+  name,
+  hideLabels,
+  number = false,
+  ...props
+}: Props) => {
   const [field, meta] = useField(name);
 
   const valid = !(meta.touched && meta.error);
@@ -22,7 +29,7 @@ const Input = ({ label, name, hideLabels, ...props }: Props) => {
       </label>
       <input
         className={`input-field-main ${valid ? "" : "touched-input"}`}
-        type="text"
+        type={number ? "number" : "text"}
         id={name}
         {...field}
         {...props}

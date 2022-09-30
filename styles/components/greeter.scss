@@ -2,6 +2,7 @@
   margin: 0 6em;
   padding-top: 2em;
   display: flex;
+
   height: 100%;
 }
 
@@ -9,12 +10,10 @@
   width: 60%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 .greeter-header {
-  font-size: 5vw;
-
+  font-size: 4vw;
+  padding-top: 2.5em;
   line-height: 1em;
   color: #1c1e2b;
 
@@ -32,4 +31,20 @@
 .greeter-img-wrapper {
   position: relative;
   z-index: 1;
+}
+
+.greeter-btn-wrapper {
+  padding: 2em 0;
+  margin-left: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.greeter-order-btn {
+  border: none;
+  color: #ffffff;
+  background-color: #282b3f;
+  font-weight: 700;
+  padding: 1em 2em;
+  border-radius: 5px;
 }

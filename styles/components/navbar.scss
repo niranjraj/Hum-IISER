@@ -1,21 +1,16 @@
 .navbar-wrapper {
   height: 70px;
-  position: fixed;
-  top: 0;
-  left: 0;
+
   width: 100%;
-  z-index: 1000;
-  background-color: #c6c9da;
 }
 .navbar {
   display: flex;
   height: 100%;
-
   align-items: center;
   justify-content: space-around;
   font-size: 1rem;
-  color: #ffffff;
-  font-family: "Montserrat";
+  color: #5b628b;
+  font-family: "Montserrat-Semibold";
 }
 .nav-item-wrapper {
   display: flex;
@@ -55,8 +50,12 @@
 }
 
 .ast-arrow-svg {
+  padding-left: 0.2em;
+  padding-top: 0.25em;
+  height: 15px;
+  width: 15px;
   & path {
-    fill: #ffffff;
+    fill: #5b628b;
     transition: all 250ms linear;
   }
 }

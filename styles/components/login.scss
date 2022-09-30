@@ -3,24 +3,79 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #ffffff;
 }
 
 .login-content-wrapper {
-  height: 300px;
-  width: 300px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.login-content {
+  width: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 10em;
 
   & h2 {
+    font-family: "Montserrat";
+    font-size: 2.5rem;
+    line-height: 1.125;
     text-align: center;
-    padding: 1em 0;
+    letter-spacing: -0.25px;
+    color: #1c1e2b;
+  }
+  & > p {
+    padding: 2em 0;
+    color: #7e8591;
+    font-size: 1rem;
+    text-align: center;
+    font-family: "Montserrat-Semibold";
   }
 }
 
+.login-img-wrapper {
+  background: url("/static/loginhum.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  padding: 5em 3em;
+
+  height: 100%;
+  width: 50%;
+}
+
+.google-btn,
+.login-back-btn {
+  border: none;
+  cursor: pointer;
+  padding: 0.5em 1em;
+  width: 400px;
+  font-family: "Montserrat-Semibold";
+  font-size: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & svg {
+    height: 30px;
+    width: 30px;
+    padding-right: 0.5em;
+  }
+}
 .google-btn {
-  color: cadetblue;
-  padding: 1em 2em;
+  background-color: #ffffff;
+  color: #131b2b;
+
+  border: 1px solid #dfdfe3;
+}
+
+.login-back-btn {
+  padding: 0.75em 1em;
+  background-color: #1c1e2b;
+  color: #ffffff;
+  text-align: center;
 }
