@@ -1,0 +1,105 @@
+.admin-container {
+  background-color: #f4f5fa;
+  height: 100vh;
+  display: flex;
+  position: relative;
+}
+.admin-content-wrapper {
+  height: 100%;
+  padding: 3em;
+  width: 80%;
+  text-align: center;
+  color: #1c1e2b;
+}
+
+.filter-wrapper {
+  height: 10%;
+  background-color: #ffffff;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+}
+.admin-order-list-wrapper {
+  background-color: #ffffff;
+  height: 90%;
+}
+.admin-order-list {
+  position: relative;
+}
+.admin-order-list-heading {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  overflow: hidden;
+  display: flex;
+
+  align-items: center;
+  border-bottom: 1px solid rgb(231, 230, 232);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+
+  max-height: 54px !important;
+  min-height: 54px !important;
+  line-height: 24px !important;
+  background-color: #f9fafc;
+  & div {
+    text-transform: uppercase;
+    white-space: nowrap;
+    width: 50px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.17px;
+  }
+}
+.admin-order-list-content {
+  margin-top: 54px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+}
+
+.admin-order-list-item {
+  display: flex;
+  align-items: center;
+}
+
+.admin-order-item-select,
+.admin-list-select-all {
+  width: 58px;
+  max-width: 58px !important;
+  min-width: 58px !important;
+}
+.admin-order-id,
+.admin-header-order-id,
+.admin-header-order-status,
+.admin-order-status {
+  width: 121.375px;
+  min-width: 121.375px;
+  max-width: 121.375px;
+  padding: 1em;
+}
+.admin-header-client-name,
+.admin-client-name {
+  min-width: 303.438px;
+  max-width: 303.438px;
+  padding: 1em;
+}
+.admin-header-issue-date,
+.admin-issue-date {
+  min-width: 182.063px;
+  max-width: 182.063px;
+  padding: 1em;
+}
+
+.admin-header-store,
+.admin-store {
+  min-width: 303.438px;
+  max-width: 303.438px;
+}
+.admin-header-phone,
+.admin-phone {
+  min-width: 182.063px;
+  max-width: 182.063px;
+  padding: 1em;
+}

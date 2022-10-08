@@ -6,6 +6,7 @@ type Props = {
   name: string;
   hideLabels?: boolean;
   number?: boolean;
+  min?: string;
 };
 
 const Input = ({

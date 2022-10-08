@@ -1,4 +1,8 @@
+// import "react-date-range/dist/styles.css";
+// import "react-date-range/dist/theme/default.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "../styles/style.scss";
+
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 

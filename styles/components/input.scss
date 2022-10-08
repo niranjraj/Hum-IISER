@@ -11,7 +11,8 @@
   font-family: "Montserrat-Semibold";
   transition: color 300ms ease;
 }
-.input-field-main {
+.input-field-main,
+.store-name {
   width: 100%;
   border-radius: 4px;
   padding: 1.2em 1.25em;
@@ -26,7 +27,8 @@
   transition: color 300ms ease, background 300ms ease, border 300ms ease;
 }
 
-.input-field-main:focus {
+.input-field-main:focus,
+.store-name:focus {
   border: 1px solid #7989e9;
 }
 .input-label.touched-label {

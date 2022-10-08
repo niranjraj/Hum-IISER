@@ -147,7 +147,7 @@ form {
     font-family: "Montserrat";
   }
 
-  [type="checkbox"] {
+  [type="radio"] {
     position: absolute;
     opacity: 0;
     width: 0;
@@ -155,14 +155,14 @@ form {
   }
 
   /* IMAGE STYLES */
-  [type="checkbox"] + span {
+  [type="radio"] + span {
     cursor: pointer;
 
     outline: 10px solid rgb(210, 210, 224);
   }
 
   /* CHECKED STYLES */
-  [type="checkbox"]:checked + span {
+  [type="radio"]:checked + span {
     outline: 10px solid rgb(102, 102, 247);
   }
 }
@@ -209,6 +209,19 @@ fieldset {
 .itemList-wrapper {
   padding: 0 2em;
   margin-bottom: 1em;
+}
+
+.item-list-store-heading {
+  color: #5b628b;
+  font-size: 1.5rem;
+  line-height: 1.125;
+  letter-spacing: -0.25px;
+  padding: 0.75em 0;
+  font-weight: 700;
+  font-family: "Montserrat-Semibold";
+}
+.orderForm-itemList {
+  padding-top: 1em;
 }
 
 .orderForm-item-wrapper {

@@ -1,95 +1,26 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import Image from "next/image";
 import * as yup from "yup";
 import "yup-phone-lite";
 import Input from "./Input";
 import formErrorMsg from "../utils/errorMessage";
+import {
+  FormValues,
+  OrderProps1,
+  OrderProps2,
+  OrderProps3,
+  OrderProps4,
+} from "../types/order";
 import { BsCheckLg } from "react-icons/bs";
-const FormSchema = yup.object().shape({
-  category: yup
-    .array()
-    .min(1, "Select atleast one store in order to continue."),
-});
 
-const FormSchema4 = yup.object().shape({
-  name: yup.string().required("- All fields must be filled."),
-  phoneNumber: yup
-    .string()
-    .phone("IN", "- Phone number is not valid")
-    .required("- All fields must be filled."),
-  location: yup.string().required("- All fields must be filled"),
-});
-const FormSchema2 = yup.object().shape({
-  items: yup
-    .array()
-    .of(
-      yup.object().shape({
-        name: yup.string().required("- All fields must be filled."),
-        quantity: yup
-          .number()
-          .typeError("- Invalid input.")
-          .required("- All fields must be filled.")
-          .max(9999999999, "- Quantity limit reached.")
-          .min(0, "- Invalid input."),
-        store: yup
-          .string()
-          .oneOf([
-            "Nilgiris",
-            "ExoticaStore",
-            "Dominos",
-            "SupremeGourmet",
-            "PaulsCreamery",
-            "SankersCoffe",
-            "Other",
-          ])
-          .required("- Select store."),
-        // store: yup.string().required("- Select a store to continue."),
-      })
-    )
-    .min(1, "Atleast one item must be added"),
-});
-type Item = {
-  name: string;
-  quantity: number;
-  store: string;
-};
-interface FormValues {
-  category: string[];
-  items: Item[];
-  name: string;
-  phoneNumber: string;
-  location: string;
-}
+import {
+  orderPage2Schema,
+  orderPage3Schema,
+  orderPage4Schema,
+} from "../utils/schema";
 
-type Props1 = {
-  setCategory: Dispatch<
-    SetStateAction<{ supermarket: boolean; restaurant: boolean }>
-  >;
-  setCurrentStep: Dispatch<SetStateAction<number>>;
-  initialCategory: { supermarket: boolean; restaurant: boolean };
-};
-
-type OrderProps2 = {
-  formData: FormValues;
-  initialCategory: { supermarket: boolean; restaurant: boolean };
-  next: (newData: any, final?: boolean) => void;
-  prev: (newData: any) => void;
-};
-type OrderProps3 = {
-  formData: FormValues;
-
-  next: (newData: any, final?: boolean) => void;
-  prev: (newData: any) => void;
-};
-type OrderProps4 = {
-  formData: FormValues;
-  preComplete: (newData: any) => void;
-  next: (newData: any, final?: boolean) => void;
-  prev: (newData: any) => void;
-};
-
-export const OrderPage1 = (props: Props1) => {
+export const OrderPage1 = (props: OrderProps1) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const handleNextStep = () => {
     if (props.initialCategory.restaurant || props.initialCategory.supermarket) {
@@ -157,16 +88,21 @@ export const OrderPage1 = (props: Props1) => {
 
 export const OrderPage2 = (props: OrderProps2) => {
   const handleSubmit = (values: FormValues) => {
+    if (props.formData.category !== values.category) {
+      values.orderItem = [];
+      props.setStoreValue(null);
+    }
     console.log(values);
     props.next(values);
   };
+
   return (
     <div className="order-page-2">
       <h2>Choose your desired store</h2>
       <Formik
         initialValues={props.formData}
         onSubmit={handleSubmit}
-        validationSchema={FormSchema}
+        validationSchema={orderPage2Schema}
       >
         {({ values, errors }) => (
           <Form>
@@ -179,7 +115,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                   <h3>Supermarket Section</h3>
                   <div className="supermarket-section">
                     <label>
-                      <Field type="checkbox" name="category" value="Nilgiris" />
+                      <Field type="radio" name="category" value="Nilgiris" />
                       <Image
                         src="/static/Nilgiris.png"
                         width="150"
@@ -189,7 +125,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                     </label>
                     <label>
                       <Field
-                        type="checkbox"
+                        type="radio"
                         name="category"
                         value="ExoticaStore"
                       />
@@ -208,7 +144,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                   <h3>Restaurant Section</h3>
                   <div className="restaurant-section">
                     <label>
-                      <Field type="checkbox" name="category" value="Dominos" />
+                      <Field type="radio" name="category" value="Dominos" />
                       <Image
                         src="/static/Dominos.png"
                         width="150"
@@ -218,7 +154,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                     </label>
                     <label>
                       <Field
-                        type="checkbox"
+                        type="radio"
                         name="category"
                         value="SupremeGourmet"
                       />
@@ -231,7 +167,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                     </label>
                     <label>
                       <Field
-                        type="checkbox"
+                        type="radio"
                         name="category"
                         value="PaulsCreamery"
                       />
@@ -244,7 +180,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                     </label>
                     <label>
                       <Field
-                        type="checkbox"
+                        type="radio"
                         name="category"
                         value="SankersCoffe"
                       />
@@ -260,7 +196,7 @@ export const OrderPage2 = (props: OrderProps2) => {
               )}
               <h3>From other stores</h3>
               <label className="other-options">
-                <Field type="checkbox" name="category" value="Other" />
+                <Field type="radio" name="category" value="Other" />
                 <Image
                   src="/static/Other.png"
                   width="150"
@@ -291,8 +227,9 @@ export const OrderPage2 = (props: OrderProps2) => {
 };
 
 export const OrderPage3 = (props: OrderProps3) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const handleSubmit = (values: FormValues) => {
-    console.log(values.items);
+    console.log(values);
     props.next(values);
   };
 
@@ -302,14 +239,14 @@ export const OrderPage3 = (props: OrderProps3) => {
       <Formik
         initialValues={props.formData}
         onSubmit={handleSubmit}
-        validationSchema={FormSchema2}
+        validationSchema={orderPage3Schema}
       >
         {({ values, errors, setFieldValue }) => (
           <Form>
             <div className="fields-wrapper">
-              {errors.items &&
-                errors.items?.length > 0 &&
-                formErrorMsg(errors.items).map(
+              {errors.orderItem &&
+                errors.orderItem?.length > 0 &&
+                formErrorMsg(errors.orderItem).map(
                   (item: string, index: number) => {
                     return (
                       <div
@@ -322,49 +259,67 @@ export const OrderPage3 = (props: OrderProps3) => {
                   }
                 )}
               <fieldset className="itemList-wrapper">
-                <legend className="itemList-legend">ItemList</legend>
+                {/* <legend className="itemList-legend">ItemList</legend> */}
+                <legend className="item-list-store-heading">
+                  {values.category == "Other"
+                    ? props.storeValue
+                      ? props.storeValue
+                      : "Select a store"
+                    : values.category}
+                </legend>
+
+                {props.formData.category == "Other" && (
+                  <input type="text" className="store-name" ref={inputRef} />
+                )}
                 <FieldArray
-                  name="items"
+                  name="orderItem"
                   render={(helpers) => {
                     return (
                       <div className="orderForm-itemList">
-                        {values.items.map((item, index) => {
+                        {values.orderItem.map((item, index) => {
+                          if (values.category === "Other") {
+                            if (props.storeValue != null) {
+                              item.store = props.storeValue;
+                            }
+                          } else {
+                            item.store = values.category;
+                          }
                           return (
                             <div className="orderForm-item-wrapper" key={index}>
                               <Input
                                 label="Item Name"
-                                name={`items[${index}].name`}
+                                name={`orderItem[${index}].name`}
                                 hideLabels={index > 0}
                               />
 
                               <Input
                                 label="Qty."
-                                name={`items[${index}].quantity`}
+                                name={`orderItem[${index}].quantity`}
                                 number={true}
+                                min="0"
                                 hideLabels={index > 0}
                               />
                               <div className="select-wrapper">
-                                <p>Select store</p>
+                                <p>Select unit</p>
                                 <Field
                                   as="select"
-                                  name={`items[${index}].store`}
+                                  name={`orderItem[${index}].unit`}
                                 >
-                                  <option value="" label="Select a store">
-                                    Select a store
+                                  <option value="" label="Select">
+                                    Select a unit
                                   </option>
-                                  {Object(values.category).map(
-                                    (item: string, index: number) => {
-                                      return (
-                                        <option
-                                          key={`${item}-${index}`}
-                                          value={item}
-                                          label={item}
-                                        >
-                                          {item}
-                                        </option>
-                                      );
-                                    }
-                                  )}
+                                  <option value="number" label="number">
+                                    number
+                                  </option>
+                                  <option value="kilogram" label="kg">
+                                    kilogram
+                                  </option>
+                                  <option value="gram" label="g">
+                                    gram
+                                  </option>
+                                  <option value="litre" label="L">
+                                    litre
+                                  </option>
                                 </Field>
                               </div>
 
@@ -390,10 +345,13 @@ export const OrderPage3 = (props: OrderProps3) => {
                           className="add-item-btn"
                           type="button"
                           onClick={() => {
+                            if (inputRef?.current?.value) {
+                              props.setStoreValue(inputRef.current.value);
+                            }
+
                             helpers.push({
                               name: "",
                               quantity: "",
-                              store: "",
                             });
                           }}
                         >
@@ -432,9 +390,8 @@ export const OrderPage4 = (props: OrderProps4) => {
   const handleSubmit = (values: FormValues) => {
     props.next(values, true);
   };
-  const handlePreComplete = (values: FormValues) => {
-    console.log(values);
 
+  const handlePreComplete = (values: FormValues) => {
     setConfirmOrder(true);
     props.preComplete(values);
   };
@@ -449,7 +406,7 @@ export const OrderPage4 = (props: OrderProps4) => {
       <Formik
         initialValues={props.formData}
         onSubmit={handleSubmit}
-        validationSchema={FormSchema4}
+        validationSchema={orderPage4Schema}
       >
         {({ values, errors, validateForm, touched }) => (
           <Form>
@@ -459,7 +416,7 @@ export const OrderPage4 = (props: OrderProps4) => {
                   <div className="order-item-summary">
                     <h4>Confirm these items?</h4>
                     <div className="items-in-order">
-                      {values.items.map((item, index) => {
+                      {values.orderItem.map((item, index) => {
                         return (
                           <div
                             className="summary-item"
@@ -481,21 +438,14 @@ export const OrderPage4 = (props: OrderProps4) => {
                   <div className="store-item-summary">
                     <h4>Order from the following stores</h4>
                     <div className="stores-in-order">
-                      {values.category.map((item, index) => {
-                        return (
-                          <div
-                            className="summary-store"
-                            key={`${item}-${index}`}
-                          >
-                            <Image
-                              src={`/static/${item}.png`}
-                              width="60"
-                              height="60"
-                              alt={item}
-                            />
-                          </div>
-                        );
-                      })}
+                      <div className="summary-store">
+                        <Image
+                          src={`/static/${values.category}.png`}
+                          width="60"
+                          height="60"
+                          alt={values.category}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -560,7 +510,6 @@ export const OrderPage4 = (props: OrderProps4) => {
                             !errormsg.location &&
                             !errormsg.phoneNumber
                           ) {
-                            console.log(errormsg);
                             handlePreComplete(values);
                           }
                         })
