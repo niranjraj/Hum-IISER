@@ -1,13 +1,14 @@
 .account-container {
   background-color: white;
   display: flex;
+  height: 100vh;
   position: relative;
+  overflow: hidden;
 }
 
 .account-content {
-  height: 100%;
   padding: 3em;
-  width: 80%;
+  flex-grow: 1;
   text-align: center;
   color: #1c1e2b;
 
@@ -82,16 +83,32 @@
 }
 .active-order-list-wrapper {
   width: 62.5em;
+  height: 80%;
+  background-color: #f9fafb;
+  overflow-y: scroll;
   margin: 0 auto;
 }
+.active-order-list {
+  overflow-y: hidden;
+  padding: 1em 0;
+}
+.active-order-item-wrapper {
+  margin-bottom: 1em;
+}
+
 .active-order-item {
-  border: 1px solid #dfe3fa;
+  border: 1px solid #7989e9;
+  cursor: pointer;
+  margin: 0 1em;
+  background-color: #ffffff;
+
   position: relative;
   padding: 1em;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+
   & div {
     font-size: 1rem;
     font-family: "Montserrat-Semibold";
@@ -127,10 +144,25 @@
   }
 }
 .active-in-detail {
-  width: 100%;
-
+  display: none;
   padding: 1em 2em;
-  background-color: #f9fafe;
+  margin: 0 1em;
+  background-color: #f1f5fd;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.active-open {
+  & > .active-in-detail {
+    display: block;
+    border: 1px solid #7989e9;
+    border-top: initial;
+  }
+  & > .active-order-item {
+    border-bottom: initial;
+    border-bottom-left-radius: initial;
+    border-bottom-right-radius: initial;
+  }
 }
 
 .active-item {
@@ -138,7 +170,11 @@
   align-items: center;
   justify-content: space-evenly;
   padding: 1em 0.5em;
-  border: 1px solid #282b3f;
+
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   margin-bottom: 0.6em;
 }
 .active-item-wrapper {
@@ -148,15 +184,57 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
   color: #888eb0;
   & h4 {
+    font-size: 1.4rem;
+    font-family: "Montserrat-Semibold";
+    color: #282b3f;
+    line-height: 1.125;
+    letter-spacing: -0.25px;
+    padding-bottom: 0.5em;
+  }
+}
+
+.active-lb {
+  background-color: #ffffff;
+  border-radius: 2px;
+  width: 60%;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & .active-lb-name {
     font-size: 1.2rem;
+    padding-right: 0.75em;
+    text-transform: capitalize;
+    font-family: "Montserrat-Semibold";
+    line-height: 1.125;
+    letter-spacing: -0.25px;
+    color: #282b3f;
+  }
+  & .active-lb-location {
+    color: #686f7d;
     font-family: "Montserrat-Semibold";
     line-height: 1.125;
     letter-spacing: -0.25px;
   }
+}
+.active-lb-info {
+  padding-top: 0.75em;
+  & p {
+    display: flex;
+    color: #686f7d;
+    letter-spacing: 1.2px;
+  }
   & span {
+    font-size: 1rem;
+
+    padding-right: 0.75em;
+    text-transform: capitalize;
     font-family: "Montserrat-Semibold";
-    padding-right: 0.5em;
+    line-height: 1.125;
+    letter-spacing: -0.25px;
+    color: #282b3f;
   }
 }

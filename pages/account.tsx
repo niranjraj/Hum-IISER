@@ -1,8 +1,10 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { useSession, signOut, getSession } from "next-auth/react";
 import { Item, FormValues, ActiveOrder } from "../types/order";
+import Image from "next/image";
 import prisma from "../utils/prismaInit";
-import { useEffect, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 
 import { IoClose } from "react-icons/io5";
 import {
@@ -12,80 +14,106 @@ import {
   OrderPage4,
 } from "../components/OrderPage";
 import SideNav from "../components/SideNav";
+import moment from "moment";
+import { wrapper } from "../redux/store";
+import {
+  setActiveOrder,
+  setFormValue,
+  updateActiveOrder,
+} from "../redux/order-slice";
+
+import { useAppSelector, useAppDispatch } from "../redux/redux-hook";
 
 const Account: NextPage = (props) => {
+  const orderItemRef = useRef<Array<HTMLDivElement | null>>([]);
   const { data: session, status } = useSession({ required: true });
   const [orderModal, setOrderModal] = useState<boolean>(false);
-  const [activeOpen, setActiveOpen] = useState<boolean>(false);
-  const [storeValue, setStoreValue] = useState<string | null>(null);
 
-  const [activeOrder, setActiveOrder] = useState<Array<ActiveOrder>>(
-    props.activeData
+  const [storeValue, setStoreValue] = useState<string | null>(null);
+  const activeOrder = useAppSelector((state) => state.order.activeOrder);
+  const formData = useAppSelector((state) => state.order.formValue);
+  const initialCategory = useAppSelector(
+    (state) => state.order.initialCategory
   );
 
-  const [data, setData] = useState<FormValues>({
-    category: "",
-    orderItem: [],
-    name: "",
-    phoneNumber: "",
-    location: "",
-  });
-  const [currentStep, setCurrentStep] = useState(0);
-  const [initialCategory, setInitialCategory] = useState({
-    supermarket: false,
-    restaurant: false,
-  });
-  const [currentStore, setCurrentStore] = useState(null);
+  const dispatch = useAppDispatch();
 
+  const [currentStep, setCurrentStep] = useState(0);
+  // const [initialCategory, setInitialCategory] = useState({
+  //   supermarket: false,
+  //   restaurant: false,
+  // });
+
+  const handleClick = (index: number) => {
+    const item = orderItemRef?.current;
+    if (item[index] && item[index]?.classList.contains("active-open")) {
+      item[index]?.classList.remove("active-open");
+    } else {
+      item[index]?.classList.add("active-open");
+    }
+    console.log();
+  };
   const handleRequest = async (formValues: FormValues) => {
-    const res = await fetch("http://localhost:3000/api/order", {
-      body: JSON.stringify(formValues),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const response = await res.json();
-    setActiveOrder((prev) => [response, ...prev]);
+    try {
+      const res = await fetch("http://localhost:3000/api/order", {
+        body: JSON.stringify(formValues),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await res.json();
+      console.log(`response:${response}`);
+
+      dispatch(updateActiveOrder(response));
+    } catch (error) {
+      console.log(error);
+    }
+
+    // setActiveOrder((prev) => [response, ...prev]);
   };
 
   const handleNextStep = (newData: FormValues, final = false) => {
-    setData((prev) => ({ ...prev, ...newData }));
+    dispatch(setFormValue({ ...formData, ...newData }));
+
     if (final) {
       setOrderModal(false);
       setCurrentStep(0);
 
       handleRequest(newData);
-      setData({
-        category: "",
-        orderItem: [],
-        name: "",
-        phoneNumber: "",
-        location: "",
-      });
+
+      dispatch(
+        setFormValue({
+          category: "",
+          orderItem: [],
+          name: "",
+          phoneNumber: "",
+          location: "",
+        })
+      );
 
       return;
     }
     setCurrentStep((prev) => prev + 1);
   };
   const handlePreComplete = (newData: FormValues) => {
-    setData((prev) => ({ ...prev, ...newData }));
+    dispatch(setFormValue({ ...formData, ...newData }));
   };
   const handlePrevStep = (newData: FormValues) => {
-    setData((prev) => ({ ...prev, ...newData }));
+    dispatch(setFormValue({ ...formData, ...newData }));
+
     setCurrentStep((prev) => prev - 1);
   };
 
   const pages = [
     <OrderPage1
-      setCategory={setInitialCategory}
       initialCategory={initialCategory}
       setCurrentStep={setCurrentStep}
       key="order-1"
     />,
     <OrderPage2
       key="order-2"
-      formData={data}
+      formData={formData}
       setStoreValue={setStoreValue}
       initialCategory={initialCategory}
       next={handleNextStep}
@@ -93,7 +121,7 @@ const Account: NextPage = (props) => {
     />,
     <OrderPage3
       key="order-3"
-      formData={data}
+      formData={formData}
       next={handleNextStep}
       storeValue={storeValue}
       setStoreValue={setStoreValue}
@@ -101,7 +129,7 @@ const Account: NextPage = (props) => {
     />,
     <OrderPage4
       key="order-4"
-      formData={data}
+      formData={formData}
       next={handleNextStep}
       prev={handlePrevStep}
       preComplete={handlePreComplete}
@@ -133,35 +161,52 @@ const Account: NextPage = (props) => {
           <div className="user-active-order">
             <div className="active-order-list-wrapper">
               <ul className="active-order-list">
-                {activeOrder.map((item, index) => {
-                  return (
-                    <div key={`${item}-${index}`}>
-                      <li
-                        className="active-order-item"
-                        onClick={() => setActiveOpen((prev) => !prev)}
+                {activeOrder.length > 0 &&
+                  activeOrder.map((item, index) => {
+                    return (
+                      <div
+                        key={`${item}-${index}`}
+                        className="active-order-item-wrapper"
+                        ref={(el) => (orderItemRef.current[index] = el)}
+                        onClick={() => handleClick(index)}
                       >
-                        <div className="active-order-user">{item.name}</div>
-                        <div className="active-order-date">
-                          {item.createdAt}
-                        </div>
-                        <div className="active-order-status">
-                          <div className="active-order-status-circle"></div>
-                          <p>active</p>
-                        </div>
-                      </li>
-                      {activeOpen && (
+                        <li className="active-order-item">
+                          <div className="active-order-id">
+                            {`#${item.id.slice(0, 6)}...`}
+                          </div>
+                          <div className="active-order-date">
+                            {moment(
+                              item.createdAt.split("T")[0],
+                              "YYYY-MM-DD"
+                            ).format("DD MMM YYYY")}
+                          </div>
+                          <div className="active-order-status">
+                            <div className="active-order-status-circle"></div>
+                            <p>active</p>
+                          </div>
+                        </li>
+
                         <div className="active-in-detail">
                           <div className="active-item-wrapper">
                             {Object(item.orderItem).map(
-                              (item: Item, index: number) => {
+                              (orderContent: Item, index: number) => {
                                 return (
                                   <div
                                     className="active-item"
-                                    key={`active-${item}-${index}`}
+                                    key={`active-${orderContent.name}-${index}`}
                                   >
-                                    <p>{item.name}</p>
-                                    <p>{item.quantity}</p>
-                                    <p>{item.store}</p>
+                                    <p>{orderContent.name}</p>
+                                    <p>{`${orderContent.quantity} ${
+                                      orderContent.unit === "number"
+                                        ? ""
+                                        : orderContent.unit
+                                    }`}</p>
+                                    <Image
+                                      src={`/static/${item.category}.png`}
+                                      width="32"
+                                      height="32"
+                                      alt={item.category}
+                                    />
                                   </div>
                                 );
                               }
@@ -169,24 +214,36 @@ const Account: NextPage = (props) => {
                           </div>
                           <div className="active-order-info">
                             <h4>Order Info</h4>
-                            <p>
-                              <span>Name:</span>
-                              {item.name}
-                            </p>
-                            <p>
-                              <span>Address:</span>
-                              {item.location}
-                            </p>
-                            <p>
-                              <span>PhoneNumber:</span>
-                              {item.phoneNumber}
-                            </p>
+                            <div className="active-lb">
+                              <p>
+                                <span className="active-lb-name">
+                                  {item.name}
+                                </span>
+                                <span className="active-lb-location">
+                                  {item.location}
+                                </span>
+                              </p>
+                              <div className="active-lb-info">
+                                <p>
+                                  <span>Order Id:</span>
+                                  {`#${item.id}`}
+                                </p>
+
+                                <p>
+                                  <span>PhoneNumber:</span>
+                                  {item.phoneNumber}
+                                </p>
+                                <p>
+                                  <span>Store:</span>
+                                  {item.orderItem[0].store}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      </div>
+                    );
+                  })}
               </ul>
             </div>
           </div>
@@ -210,43 +267,82 @@ const Account: NextPage = (props) => {
   return <div></div>;
 };
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getSession(context);
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (ctx: GetServerSidePropsContext) => {
+    const session = await getSession(ctx);
 
-  let activeData: any = [];
-  if (session && session.user?.email) {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user?.email },
-    });
+    let activeData: any = [];
+    if (session && session.user?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user?.email },
+      });
 
-    const activeOrder = await prisma.order.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      where: { active: true, userId: user?.id },
-      include: {
-        orderItem: {
-          select: {
-            name: true,
-            quantity: true,
-            unit: true,
-            store: true,
+      const activeOrder = await prisma.order.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: { active: true, userId: user?.id },
+
+        include: {
+          orderItem: {
+            select: {
+              name: true,
+              quantity: true,
+              unit: true,
+              store: true,
+            },
           },
         },
-      },
-    });
-    activeData = activeOrder;
+      });
+      activeData = activeOrder.map(({ userId, createdAt, ...rest }) => {
+        return { ...rest, createdAt: JSON.stringify(createdAt) };
+      });
 
-    activeData = activeData.map((item: ActiveOrder) => {
-      return { ...item, createdAt: JSON.stringify(item.createdAt) };
-    });
+      store.dispatch(setActiveOrder(activeData));
+    }
+
+    return {
+      props: {},
+    };
   }
+);
 
-  return {
-    props: { activeData },
-  };
-};
+//async (
+//   context: GetServerSidePropsContext
+// ) => {
+//   const session = await getSession(context);
+
+//   let activeData: any = [];
+//   if (session && session.user?.email) {
+//     const user = await prisma.user.findUnique({
+//       where: { email: session.user?.email },
+//     });
+
+//     const activeOrder = await prisma.order.findMany({
+//       orderBy: {
+//         createdAt: "desc",
+//       },
+//       where: { active: true, userId: user?.id },
+
+//       include: {
+//         orderItem: {
+//           select: {
+//             name: true,
+//             quantity: true,
+//             unit: true,
+//             store: true,
+//           },
+//         },
+//       },
+//     });
+//     activeData = activeOrder.map(({ userId, createdAt, ...rest }) => {
+//       return { ...rest, createdAt: JSON.stringify(createdAt) };
+//     });
+//   }
+
+//   return {
+//     props: { activeData },
+//   };
+// };
 
 export default Account;

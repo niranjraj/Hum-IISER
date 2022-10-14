@@ -3,7 +3,10 @@
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/style.scss";
 
+import { wrapper } from "../redux/store";
+
 import { SessionProvider } from "next-auth/react";
+
 import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -14,4 +17,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

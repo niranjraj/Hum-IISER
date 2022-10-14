@@ -30,17 +30,9 @@ const orderHandler: NextApiHandler = async (req, res) => {
           },
         },
       });
-      console.log(order);
+      const { userId, ...newOrder } = order;
 
-      res.status(200).json({
-        active: order.active,
-        name: order.name,
-        phoneNumber: order.phoneNumber,
-        location: order.location,
-        category: order.category,
-        createdAt: order.createdAt,
-        orderItem: order.orderItem,
-      });
+      res.status(200).json(newOrder);
     }
     if (req.method === "GET") {
       let startDate = new Date(String(req.query.startDate));

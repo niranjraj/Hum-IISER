@@ -7,6 +7,10 @@ export type Item = {
   store: string;
 };
 
+export type InitialCategory = {
+  supermarket: boolean;
+  restaurant: boolean;
+};
 export interface FormValues {
   category: string;
   orderItem: Item[];
@@ -15,6 +19,7 @@ export interface FormValues {
   location: string;
 }
 export interface ActiveOrder {
+  id: string;
   category: string;
   orderItem: Item[];
   name: string;
@@ -25,9 +30,6 @@ export interface ActiveOrder {
 }
 
 export type OrderProps1 = {
-  setCategory: Dispatch<
-    SetStateAction<{ supermarket: boolean; restaurant: boolean }>
-  >;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   initialCategory: { supermarket: boolean; restaurant: boolean };
 };

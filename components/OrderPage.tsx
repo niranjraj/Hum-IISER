@@ -19,8 +19,11 @@ import {
   orderPage3Schema,
   orderPage4Schema,
 } from "../utils/schema";
+import { useAppDispatch } from "../redux/redux-hook";
+import { setInitialCategory } from "../redux/order-slice";
 
 export const OrderPage1 = (props: OrderProps1) => {
+  const dispatch = useAppDispatch();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const handleNextStep = () => {
     if (props.initialCategory.restaurant || props.initialCategory.supermarket) {
@@ -39,11 +42,18 @@ export const OrderPage1 = (props: OrderProps1) => {
           className={`supermarket-wrapper ${
             props.initialCategory.supermarket ? "active-category" : ""
           }`}
-          onClick={() =>
-            props.setCategory((prev) => ({
-              ...prev,
-              supermarket: !prev.supermarket,
-            }))
+          onClick={
+            () =>
+              dispatch(
+                setInitialCategory({
+                  ...props.initialCategory,
+                  supermarket: !props.initialCategory.supermarket,
+                })
+              )
+            // props.setCategory((prev) => ({
+            //   ...prev,
+            //   supermarket: !prev.supermarket,
+            // }))
           }
         >
           {props.initialCategory.supermarket ? <BsCheckLg /> : null}
@@ -61,10 +71,12 @@ export const OrderPage1 = (props: OrderProps1) => {
             props.initialCategory.restaurant ? "active-category" : ""
           }`}
           onClick={() =>
-            props.setCategory((prev) => ({
-              ...prev,
-              restaurant: !prev.restaurant,
-            }))
+            dispatch(
+              setInitialCategory({
+                ...props.initialCategory,
+                restaurant: !props.initialCategory.restaurant,
+              })
+            )
           }
         >
           {props.initialCategory.restaurant ? <BsCheckLg /> : null}

@@ -6,7 +6,7 @@
 }
 .admin-content-wrapper {
   height: 100%;
-  padding: 3em;
+  padding: 2em 3em;
   width: 80%;
   text-align: center;
   color: #1c1e2b;
@@ -25,14 +25,18 @@
 }
 .admin-order-list {
   position: relative;
+  overflow-y: hidden;
+  height: 100%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 .admin-order-list-heading {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
   overflow: hidden;
   display: flex;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
 
   align-items: center;
   border-bottom: 1px solid rgb(231, 230, 232);
@@ -53,10 +57,14 @@
   }
 }
 .admin-order-list-content {
-  margin-top: 54px;
   display: flex;
-  flex-direction: column;
   position: absolute;
+  overflow-y: scroll;
+  height: 100%;
+
+  width: 100%;
+  margin: 54px 0;
+  flex-direction: column;
 }
 
 .admin-order-list-item {
@@ -102,4 +110,253 @@
   min-width: 182.063px;
   max-width: 182.063px;
   padding: 1em;
+}
+
+.admin-order-list-footer {
+  background-color: #f9fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-top: 1px solid rgb(231, 230, 232);
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 60px;
+}
+.admin-order-button-wrapper {
+  & button {
+    outline: none;
+    border: none;
+    margin-right: 1em;
+    padding: 0.75em 1.5em;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: "Montserrat-Semibold";
+    text-transform: capitalize;
+    border-radius: 3px;
+    background-color: #282b3f;
+  }
+}
+
+.admin-filter-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  & select {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0.5em 1.25em;
+    background: #ffffff;
+    color: #aeb1c5;
+    border: 1px solid #dfe3fa;
+    font-size: 1rem;
+  }
+}
+
+.admin-order-count {
+  & p {
+    font-size: 1.5rem;
+    font-family: "Montserrat";
+    & span {
+      font-family: "Montserrat-Semibold";
+    }
+  }
+}
+
+.admin-preview-container {
+  background-color: #f4f5fa;
+  height: 100vh;
+  display: flex;
+  overflow-y: hidden;
+  position: relative;
+}
+.admin-preview-content-wrapper {
+  height: 100%;
+  padding: 2em 3em;
+  width: 90%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  text-align: center;
+  color: #1c1e2b;
+}
+
+.admin-order-detail-wrapper {
+  background-color: #ffffff;
+  width: 70%;
+  padding: 2em 3em;
+}
+.admin-preview-buttons-wrapper {
+  height: 300px;
+  width: 20%;
+  background-color: #ffffff;
+  padding: 2em 3em;
+  & button {
+    width: 100%;
+    border: none;
+    padding: 1em;
+    cursor: pointer;
+    margin-bottom: 2em;
+    font-family: "Montserrat-Semibold";
+  }
+}
+
+.admin-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & .admin-preview-id {
+    font-size: 1.4rem;
+    font-family: "Montserrat-Semibold";
+    color: #282b3f;
+    line-height: 1.125;
+    letter-spacing: -0.25px;
+    padding-bottom: 0.5em;
+  }
+  & .admin-order-status {
+    border-radius: 5px;
+    margin-right: 1.25em;
+    height: 2.5em;
+    width: 6.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(51, 214, 159, 0.04);
+
+    & .active-order-status-circle {
+      width: 0.5em;
+      height: 0.5em;
+      margin-right: 0.5em;
+      border-radius: 50%;
+      background-color: #33d7a0;
+    }
+    & p {
+      font-size: 0.85rem;
+      line-height: 1.125;
+      letter-spacing: -0.25px;
+      color: #33d7a0;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.admin-preview-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2em 0;
+  & h3 {
+    font-size: 1.2rem;
+    font-family: "Montserrat-Semibold";
+    color: #282b3f;
+    line-height: 1.125;
+    letter-spacing: -0.25px;
+  }
+  & p {
+    padding: 0.5em 0 0.5em 0.75em;
+    & span {
+      font-family: "Montserrat-Semibold";
+      color: #282b3f;
+      font-weight: 600;
+    }
+  }
+}
+
+.admin-preview-order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-bottom: 1px solid rgb(231, 230, 232);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+
+  max-height: 54px !important;
+  min-height: 54px !important;
+  line-height: 24px !important;
+  background-color: #f9fafc;
+}
+.admin-preview-order {
+  height: 300px;
+  background-color: #f4f5fa;
+  overflow-y: scroll;
+}
+
+.admin-preview-item {
+  display: flex;
+  margin: 0.5em;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #ffffff;
+  padding: 1em 0;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.modal-wrapper {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background-color: rgba(40, 43, 63, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-container {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background-color: #ffffff;
+  height: 500px;
+  width: 500px;
+
+  border-radius: 2px;
+  padding: 1em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #1c1e2b;
+  font-size: 1.4rem;
+  font-family: "Montserrat-Semibold";
+  & h3 {
+    padding-top: 2em;
+  }
+  & div {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .cancel-btn {
+    border-radius: 5px;
+    padding: 1em 3em;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #f04c4c;
+  }
+  .confirm-paid-btn {
+    border-radius: 5px;
+    padding: 1em 3em;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #33d7a0;
+  }
+}
+
+.order-preview-store {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & .admin-preview-store {
+    display: flex;
+    align-items: center;
+  }
 }
