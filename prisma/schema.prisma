@@ -76,6 +76,7 @@ model Order {
   location      String?
   createdAt     DateTime   @default(now())
   category      String?
+  store         String?
 }
 
 
@@ -86,6 +87,6 @@ model OrderItem {
   unit          String?
   orderId       String
   order         Order     @relation(fields: [orderId], references: [id])
-  store         String?
+
 
 }

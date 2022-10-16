@@ -17,6 +17,7 @@ interface orderState {
 const initialState: orderState = {
   formValue: {
     category: "",
+    store: "",
     orderItem: [],
     name: "",
     phoneNumber: "",

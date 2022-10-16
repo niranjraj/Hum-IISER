@@ -15,6 +15,7 @@ export const orderPage4Schema = yup.object().shape({
   location: yup.string().required("- All fields must be filled"),
 });
 export const orderPage3Schema = yup.object().shape({
+  store: yup.string().required("- Enter a store to continue."),
   orderItem: yup
     .array()
     .of(
@@ -30,7 +31,6 @@ export const orderPage3Schema = yup.object().shape({
           .string()
           .oneOf(["number", "kilogram", "litre", "gram"])
           .required("- Select a unit."),
-        store: yup.string().required("- Enter a store to continue."),
       })
     )
     .min(1, "Atleast one item must be added"),

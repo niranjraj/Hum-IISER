@@ -26,6 +26,7 @@ const SideNav = () => {
             ></div>
           )}
         </div>
+        <div className="side-nav-name">{session?.user?.name}</div>
       </div>
       <div className="side-nav-item-wrapper">
         <ul className="side-nav-items">

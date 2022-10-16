@@ -4,7 +4,6 @@ export type Item = {
   name: string;
   quantity: number;
   unit: string;
-  store: string;
 };
 
 export type InitialCategory = {
@@ -14,6 +13,7 @@ export type InitialCategory = {
 export interface FormValues {
   category: string;
   orderItem: Item[];
+  store: string;
   name: string;
   phoneNumber: string;
   location: string;
@@ -24,9 +24,27 @@ export interface ActiveOrder {
   orderItem: Item[];
   name: string;
   createdAt: string;
+  store: string;
   active: boolean;
   phoneNumber: string;
   location: string;
+}
+export interface Serialized {
+  createdAt: string;
+  id: string;
+  active: boolean;
+  paid: boolean;
+  name: string | null;
+  store: string;
+  phoneNumber: string;
+  location: string | null;
+  category: string | null;
+  orderItem: {
+    name: string | null;
+    quantity: number | null;
+
+    unit: string | null;
+  }[];
 }
 
 export type OrderProps1 = {

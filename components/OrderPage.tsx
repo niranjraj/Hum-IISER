@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import Image from "next/image";
 import * as yup from "yup";
@@ -239,7 +239,10 @@ export const OrderPage2 = (props: OrderProps2) => {
 };
 
 export const OrderPage3 = (props: OrderProps3) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  let initialOtherValue = props.formData;
+  if (props.formData.category !== "Other") {
+    initialOtherValue = { ...props.formData, store: props.formData.category };
+  }
   const handleSubmit = (values: FormValues) => {
     console.log(values);
     props.next(values);
@@ -249,7 +252,7 @@ export const OrderPage3 = (props: OrderProps3) => {
     <div className="order-page-3">
       <h2>Add items of your choice</h2>
       <Formik
-        initialValues={props.formData}
+        initialValues={initialOtherValue}
         onSubmit={handleSubmit}
         validationSchema={orderPage3Schema}
       >
@@ -281,7 +284,7 @@ export const OrderPage3 = (props: OrderProps3) => {
                 </legend>
 
                 {props.formData.category == "Other" && (
-                  <input type="text" className="store-name" ref={inputRef} />
+                  <Input label="Enter Store" name="store" />
                 )}
                 <FieldArray
                   name="orderItem"
@@ -289,13 +292,6 @@ export const OrderPage3 = (props: OrderProps3) => {
                     return (
                       <div className="orderForm-itemList">
                         {values.orderItem.map((item, index) => {
-                          if (values.category === "Other") {
-                            if (props.storeValue != null) {
-                              item.store = props.storeValue;
-                            }
-                          } else {
-                            item.store = values.category;
-                          }
                           return (
                             <div className="orderForm-item-wrapper" key={index}>
                               <Input
@@ -357,13 +353,10 @@ export const OrderPage3 = (props: OrderProps3) => {
                           className="add-item-btn"
                           type="button"
                           onClick={() => {
-                            if (inputRef?.current?.value) {
-                              props.setStoreValue(inputRef.current.value);
-                            }
-
                             helpers.push({
                               name: "",
                               quantity: "",
+                              unit: "",
                             });
                           }}
                         >
@@ -434,12 +427,12 @@ export const OrderPage4 = (props: OrderProps4) => {
                             className="summary-item"
                             key={`${item.name}-${index}`}
                           >
-                            <p>{item.name}</p>
+                            <p className="summary-item-name">{item.name}</p>
                             <Image
-                              src={`/static/${item.store}.png`}
+                              src={`/static/${values.category}.png`}
                               width="32"
                               height="32"
-                              alt={item.store}
+                              alt={values.category}
                             />
                             <p>{item.quantity}</p>
                           </div>

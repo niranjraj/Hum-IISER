@@ -18,9 +18,10 @@ import {
   setSelectedOrder,
 } from "../../redux/order-slice";
 import { category } from "../../utils/initialValues";
-import { execFile } from "child_process";
+
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
 
 const initialValue = {
   dateRange: [null, null],
@@ -35,6 +36,7 @@ const Admin: NextPage = (props) => {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
   const [checkAll, setCheckAll] = useState(false);
+  const [modal, setModal] = useState(false);
   const currentList = useAppSelector((state) => state.order.adminOrder);
   const adminOrderCount = useAppSelector((state) => state.order.adminCount);
   const selectedOrder = useAppSelector((state) => state.order.selectedOrder);
@@ -60,12 +62,12 @@ const Admin: NextPage = (props) => {
       );
     }
   };
-  const handleSelected = async () => {
+  const handleSelected = async (handleKey: string) => {
     if (selectedOrder.length < 1) {
       return;
     } else {
       const res = await fetch("http://localhost:3000/api/order/active", {
-        body: JSON.stringify(selectedOrder),
+        body: JSON.stringify({ selectedOrder, selected: handleKey }),
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +77,6 @@ const Admin: NextPage = (props) => {
         dispatch(setSelectedOrder([]));
       }
       const response = await res.json();
-      console.log(response);
     }
   };
 
@@ -102,14 +103,36 @@ const Admin: NextPage = (props) => {
     console.log("in submit");
     handleRequest(values);
   };
-  if (session && session.user.role == "user") {
+  if (session && session?.user?.role == "user") {
     router.push("/");
   }
-  if (session && session.user.role == "admin") {
+  if (session && session?.user?.role == "admin") {
     return (
       <div className="admin-container">
         <SideNav />
         <div className="admin-content-wrapper">
+          {modal && (
+            <div className="modal-wrapper">
+              <div className="modal-container">
+                <h3>Confirm payment for this Order?</h3>
+
+                <div>
+                  <button
+                    className="confirm-paid-btn"
+                    onClick={() => handleSelected("payment")}
+                  >
+                    Paid
+                  </button>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="filter-wrapper">
             <Formik initialValues={initialValue} onSubmit={handleSubmit}>
               {({ values }) => (
@@ -178,7 +201,15 @@ const Admin: NextPage = (props) => {
                           6
                         )}...`}</div>
                         <div className="admin-order-status">
-                          {item.active ? <MdPending /> : <AiFillCheckCircle />}
+                          {item.active ? (
+                            <MdPending
+                              style={{ color: "rgba(255, 135, 0, 0.5)" }}
+                            />
+                          ) : (
+                            <AiFillCheckCircle
+                              style={{ color: "rgba(51, 214, 159, 0.5)" }}
+                            />
+                          )}
                         </div>
                         <div className="admin-client-name">{item.name}</div>
                         <div className="admin-issue-date">
@@ -195,7 +226,9 @@ const Admin: NextPage = (props) => {
                         </div>
                         <div className="admin-link">
                           <Link href={`/admin/${item.id}`}>
-                            <a> to main</a>
+                            <a>
+                              <BsFillArrowRightCircleFill />
+                            </a>
                           </Link>
                         </div>
                       </div>
@@ -209,8 +242,10 @@ const Admin: NextPage = (props) => {
                   </p>
                 </div>
                 <div className="admin-order-button-wrapper">
-                  <button>download</button>
-                  <button onClick={handleSelected}>confirm</button>
+                  <button onClick={() => setModal(true)}>Payment</button>
+                  <button onClick={() => handleSelected("confirm")}>
+                    confirm
+                  </button>
                 </div>
                 <div className="admin-order-list-pagination"></div>
               </div>

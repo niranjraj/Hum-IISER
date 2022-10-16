@@ -394,8 +394,9 @@ fieldset {
     border-radius: 5px;
     margin-bottom: 1em;
     padding: 1.2em 1.25em;
-    & p {
+    & .summary-item-name {
       font-size: 1rem;
+      width: 50%;
       font-weight: 700;
       color: #888eb0;
       font-family: "Montserrat-Semibold";

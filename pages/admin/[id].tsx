@@ -9,24 +9,41 @@ import { current } from "@reduxjs/toolkit";
 import prisma from "../../utils/prismaInit";
 import { statusColors } from "../../utils/initialValues";
 import { useSession } from "next-auth/react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { MdPaid } from "react-icons/md";
+import { GiConfirmed } from "react-icons/gi";
+import { Serialized } from "../../types/order";
 
-const AdminPreview: NextPage = (props) => {
+const AdminPreview: NextPage<{ serializedOrder: Serialized }> = (props) => {
   const { data: session, status } = useSession({ required: true });
   const [modal, setModal] = useState(false);
   const [currentPreview, setCurrentPreview] = useState(props.serializedOrder);
+  console.log(currentPreview.paid);
   const router = useRouter();
+  const handleRequest = async (handleKey: string) => {
+    const res = await fetch("http://localhost:3000/api/order/active", {
+      body: JSON.stringify({
+        selectedOrder: [currentPreview.id],
+        selected: handleKey,
+      }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await res.json();
+  };
   const handleConfirm = async () => {
     if (currentPreview.active) {
-      const res = await fetch("http://localhost:3000/api/order/active", {
-        body: JSON.stringify([currentPreview.id]),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const response = await res.json();
-
+      const response = await handleRequest("confirm");
       setCurrentPreview(response);
+    }
+  };
+  const handlePayment = async () => {
+    if (!currentPreview.paid) {
+      const response = await handleRequest("payment");
+      setCurrentPreview(response);
+      setModal(false);
     }
   };
   if (session && session.user.role == "user") {
@@ -43,7 +60,12 @@ const AdminPreview: NextPage = (props) => {
                 <h3>Confirm payment for this Order?</h3>
 
                 <div>
-                  <button className="confirm-paid-btn">Paid</button>
+                  <button
+                    className="confirm-paid-btn"
+                    onClick={() => handlePayment()}
+                  >
+                    Paid
+                  </button>
                   <button
                     className="cancel-btn"
                     onClick={() => setModal(false)}
@@ -91,14 +113,20 @@ const AdminPreview: NextPage = (props) => {
               </div>
             </div>
             <div className="order-preview-store">
-              <div className="admin-preview-paid">Not Paid</div>
+              <div className="admin-preview-paid">
+                {currentPreview.paid ? "Paid" : "Not Paid"}
+              </div>
               <div className="admin-preview-store">
                 <div className="admin-preview-store-name">
                   {currentPreview.orderItem[0].store}
                 </div>
                 <Image
                   src={`/static/${currentPreview.category}.png`}
-                  alt={currentPreview.orderItem[0].store}
+                  alt={
+                    currentPreview.orderItem[0].store
+                      ? currentPreview.orderItem[0].store
+                      : "store"
+                  }
                   height="100"
                   width="100"
                 />
@@ -139,9 +167,15 @@ const AdminPreview: NextPage = (props) => {
             </div>
           </div>
           <div className="admin-preview-buttons-wrapper">
-            <button onClick={() => router.push("/admin")}>Back</button>
-            <button onClick={() => handleConfirm()}>Confirm</button>
-            <button onClick={() => setModal(true)}>Payment</button>
+            <button onClick={() => router.push("/admin")}>
+              <AiOutlineArrowLeft /> Back
+            </button>
+            <button onClick={() => handleConfirm()}>
+              <GiConfirmed /> Confirm
+            </button>
+            <button onClick={() => setModal(true)}>
+              <MdPaid /> Payment
+            </button>
           </div>
         </div>
       </div>

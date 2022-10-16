@@ -9,39 +9,79 @@ const activeHandler: NextApiHandler = async (req, res) => {
   if (session) {
     if (req.method == "POST") {
       const data = req.body;
-      if (data.length == 1) {
-        const updatedActive = await prisma.order.update({
-          where: {
-            id: data[0],
-          },
-          data: {
-            active: false,
-          },
-          include: {
-            orderItem: {
-              select: {
-                name: true,
-                quantity: true,
-                store: true,
+      console.log(data.selected);
+      if (data.selected == "confirm") {
+        if (data.selectedOrder.length == 1) {
+          const updatedActive = await prisma.order.update({
+            where: {
+              id: data.selectedOrder[0],
+            },
+            data: {
+              active: false,
+            },
+            include: {
+              orderItem: {
+                select: {
+                  name: true,
+                  quantity: true,
+                  store: true,
+                },
               },
             },
-          },
-        });
-        const { userId, ...newOrder } = updatedActive;
+          });
+          const { userId, ...newOrder } = updatedActive;
 
-        res.status(200).json(newOrder);
-      } else {
-        const updatedActive = await prisma.order.updateMany({
-          where: {
-            id: { in: data },
-          },
-          data: {
-            active: false,
-          },
-        });
-        console.log(updatedActive);
+          res.status(200).json(newOrder);
+        } else {
+          const updatedActive = await prisma.order.updateMany({
+            where: {
+              id: { in: data.selectedOrder },
+            },
+            data: {
+              active: false,
+            },
+          });
+          console.log(updatedActive);
 
-        res.status(200);
+          res.status(200);
+        }
+      }
+
+      if (data.selected == "payment") {
+        if (data.selectedOrder.length == 1) {
+          const updatedActive = await prisma.order.update({
+            where: {
+              id: data.selectedOrder[0],
+            },
+            data: {
+              paid: true,
+            },
+            include: {
+              orderItem: {
+                select: {
+                  name: true,
+                  quantity: true,
+                  store: true,
+                },
+              },
+            },
+          });
+          const { userId, ...newOrder } = updatedActive;
+
+          res.status(200).json(newOrder);
+        } else {
+          const updatedActive = await prisma.order.updateMany({
+            where: {
+              id: { in: data.selectedOrder },
+            },
+            data: {
+              paid: true,
+            },
+          });
+          console.log(updatedActive);
+
+          res.status(200);
+        }
       }
     }
   }

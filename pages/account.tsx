@@ -39,10 +39,6 @@ const Account: NextPage = (props) => {
   const dispatch = useAppDispatch();
 
   const [currentStep, setCurrentStep] = useState(0);
-  // const [initialCategory, setInitialCategory] = useState({
-  //   supermarket: false,
-  //   restaurant: false,
-  // });
 
   const handleClick = (index: number) => {
     const item = orderItemRef?.current;
@@ -87,6 +83,7 @@ const Account: NextPage = (props) => {
           category: "",
           orderItem: [],
           name: "",
+          store: "",
           phoneNumber: "",
           location: "",
         })
@@ -235,7 +232,7 @@ const Account: NextPage = (props) => {
                                 </p>
                                 <p>
                                   <span>Store:</span>
-                                  {item.orderItem[0].store}
+                                  {item.store}
                                 </p>
                               </div>
                             </div>
@@ -289,7 +286,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
               name: true,
               quantity: true,
               unit: true,
-              store: true,
             },
           },
         },
