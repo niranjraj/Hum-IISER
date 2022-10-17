@@ -1,11 +1,12 @@
 import { useSession, signOut } from "next-auth/react";
 
 import profilePic from "../public/static/default.jpg";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 const SideNav = () => {
   const { data: session, status } = useSession();
+  const [menu, setMenu] = useState(false);
   return (
     <div className="side-nav-wrapper">
       <div className="side-nav-header">
@@ -28,7 +29,7 @@ const SideNav = () => {
         </div>
         <div className="side-nav-name">{session?.user?.name}</div>
       </div>
-      <div className="side-nav-item-wrapper">
+      <div className={`side-nav-item-wrapper ${menu ? "open-menu" : ""}`}>
         <ul className="side-nav-items">
           <li>
             <Link href="/">
@@ -41,6 +42,14 @@ const SideNav = () => {
             </button>
           </li>
         </ul>
+      </div>
+      <div
+        className={`side-nav-hamburger ${menu ? "open-menu" : ""}`}
+        onClick={() => setMenu((prev) => !prev)}
+      >
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
   );

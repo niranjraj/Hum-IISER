@@ -1,3 +1,4 @@
+@use "../base/function.scss" as *;
 body.form-modal-open {
   overflow-y: hidden;
 }
@@ -8,11 +9,17 @@ body.form-modal-open {
   display: flex;
   flex-direction: column;
   align-items: center;
+  @include tablet-portrait-and-below {
+    padding: 2.5em 1em;
+  }
 
   & p {
     font-size: 1.2rem;
     padding-top: 0.5em;
     font-family: "Montserrat";
+    @include mobile-landscape-and-below {
+      padding-top: 1.5em;
+    }
   }
 }
 
@@ -24,6 +31,8 @@ body.form-modal-open {
     padding-top: 0.25em;
     font-size: 2.5rem;
     font-family: "Montserrat-SemiBold";
+    @include tablet-portrait-and-below {
+    }
   }
 }
 .order-section {
@@ -34,6 +43,11 @@ body.form-modal-open {
   align-items: center;
   justify-content: space-evenly;
   width: 100%;
+  @include mobile-landscape-and-below {
+    margin-top: 1em;
+    padding: 2em 0;
+    flex-direction: column;
+  }
 
   & div {
     padding: 2em;
@@ -45,6 +59,12 @@ body.form-modal-open {
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
       rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     transition: background-color 0.3s ease-in-out;
+    @include mobile-landscape-and-below {
+      width: 150px;
+      height: 150px;
+      padding: 1em;
+      margin-bottom: 1.5em;
+    }
     & p {
       position: absolute;
       opacity: 0;
@@ -102,6 +122,9 @@ body.form-modal-open {
 
   border-radius: 5px;
   cursor: pointer;
+  @include tablet-landscape-and-below {
+    font-size: 1.2rem;
+  }
 }
 
 .next-step-button {
@@ -131,6 +154,9 @@ body.form-modal-open {
   height: 100%;
   width: 100%;
   padding: 0 5em;
+  @include tablet-landscape-and-below {
+    padding: 0 1em;
+  }
 }
 
 form {
@@ -172,6 +198,9 @@ form {
   display: flex;
   flex-direction: column;
   height: 90%;
+  @include mobile-landscape-and-below {
+    height: 85%;
+  }
 }
 
 .supermarket-section,
@@ -201,6 +230,7 @@ form {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1em;
 }
 
 fieldset {
@@ -209,6 +239,9 @@ fieldset {
 .itemList-wrapper {
   padding: 0 2em;
   margin-bottom: 1em;
+  @include mobile-landscape-and-below {
+    padding: 0;
+  }
 }
 
 .item-list-store-heading {
@@ -303,6 +336,9 @@ fieldset {
 
 .form-bottom {
   height: 10%;
+  @include mobile-landscape-and-below {
+    height: 15%;
+  }
 }
 
 .order-contact-details {
@@ -343,6 +379,13 @@ fieldset {
     font-weight: 700;
     color: #ffffff;
     background-color: #282b3f;
+    @include tablet-landscape-and-below {
+      font-size: 1.2rem;
+    }
+    @include mobile-landscape-and-below {
+      padding: 1em;
+      font-size: 1rem;
+    }
   }
   & .cancel-order-btn {
     border-radius: 5px;
@@ -352,6 +395,13 @@ fieldset {
     font-weight: 700;
     color: #ffffff;
     background-color: #f04c4c;
+    @include tablet-landscape-and-below {
+      font-size: 1.2rem;
+    }
+    @include mobile-landscape-and-below {
+      padding: 1em;
+      font-size: 1rem;
+    }
   }
 }
 
@@ -375,6 +425,14 @@ fieldset {
     overflow-y: scroll;
     height: 100%;
     margin: 0 1em;
+    @include mobile-landscape-and-below {
+      width: 100%;
+    }
+  }
+  .store-item-summary {
+    @include mobile-landscape-and-below {
+      display: none;
+    }
   }
   .stores-in-order {
     display: flex;

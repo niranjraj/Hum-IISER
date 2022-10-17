@@ -24,7 +24,6 @@ const orderHandler: NextApiHandler = async (req, res) => {
             select: {
               name: true,
               quantity: true,
-              store: true,
               unit: true,
             },
           },
@@ -51,7 +50,7 @@ const orderHandler: NextApiHandler = async (req, res) => {
             select: {
               name: true,
               quantity: true,
-              store: true,
+              unit: true,
             },
           },
         },

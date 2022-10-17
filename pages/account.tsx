@@ -32,6 +32,7 @@ const Account: NextPage = (props) => {
   const [storeValue, setStoreValue] = useState<string | null>(null);
   const activeOrder = useAppSelector((state) => state.order.activeOrder);
   const formData = useAppSelector((state) => state.order.formValue);
+  console.log(activeOrder);
   const initialCategory = useAppSelector(
     (state) => state.order.initialCategory
   );
@@ -192,8 +193,12 @@ const Account: NextPage = (props) => {
                                     className="active-item"
                                     key={`active-${orderContent.name}-${index}`}
                                   >
-                                    <p>{orderContent.name}</p>
-                                    <p>{`${orderContent.quantity} ${
+                                    <p className="active-item-name">
+                                      {orderContent.name}
+                                    </p>
+                                    <p className="active-item-quantity">{`${
+                                      orderContent.quantity
+                                    } ${
                                       orderContent.unit === "number"
                                         ? ""
                                         : orderContent.unit
@@ -221,7 +226,7 @@ const Account: NextPage = (props) => {
                                 </span>
                               </p>
                               <div className="active-lb-info">
-                                <p>
+                                <p className="active-lb-order-id">
                                   <span>Order Id:</span>
                                   {`#${item.id}`}
                                 </p>

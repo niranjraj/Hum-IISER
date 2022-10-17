@@ -1,7 +1,14 @@
 .navbar-wrapper {
-  height: 70px;
+  height: 80px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 
-  width: 100%;
+  width: 70%;
+  background-color: #1c1e2b;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
 }
 .navbar {
   display: flex;
@@ -9,7 +16,7 @@
   align-items: center;
   justify-content: space-around;
   font-size: 1rem;
-  color: #5b628b;
+  color: #ffffff;
   font-family: "Montserrat-Semibold";
 }
 .nav-item-wrapper {
@@ -31,8 +38,8 @@
 
 .login-button {
   padding: 0.5em 2em;
-  background-color: #5b628b;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #5b628b;
   font-weight: 700;
   letter-spacing: 1px;
   border-radius: 5px;
@@ -55,7 +62,7 @@
   height: 15px;
   width: 15px;
   & path {
-    fill: #5b628b;
+    fill: #ffffff;
     transition: all 250ms linear;
   }
 }
@@ -82,8 +89,9 @@
   top: 100%;
   left: 5%;
   display: none;
+  color: #1c1e2b;
   width: 240px;
-  background-color: darken(#c6c9da, 4%);
+  background-color: #ffffff;
   border: 1px solid darken(#5b628b, 4%);
   box-shadow: 0px 2px 0 darken(#5b628b, 5%), 2px 4px 6px darken(#5b628b, 2%);
   transition: all 150ms linear;
