@@ -1,14 +1,19 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { getSession, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SideNav from "../../components/SideNav";
 import prisma from "../../utils/prismaInit";
 import { MdPending } from "react-icons/md";
-import { AiFillCheckCircle } from "react-icons/ai";
+import {
+  AiFillCheckCircle,
+  AiOutlineRight,
+  AiOutlineLeft,
+} from "react-icons/ai";
 import moment from "moment";
 import Image from "next/image";
 import DateRangePicker from "../../components/DateRangePicker";
 import { wrapper } from "../../redux/store";
+import ReactPaginate from "react-paginate";
 
 import { useAppSelector, useAppDispatch } from "../../redux/redux-hook";
 import { Field, Form, Formik } from "formik";
@@ -20,7 +25,7 @@ import {
 import { category } from "../../utils/initialValues";
 
 import Link from "next/link";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
 
 const initialValue = {
@@ -35,12 +40,18 @@ interface adminQuery {
 const Admin: NextPage = (props) => {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
+  const [filterValues, setFilterValues] = useState<adminQuery | null>(null);
+  const listInnerRef = useRef<HTMLUListElement | null>(null);
   const [checkAll, setCheckAll] = useState(false);
   const [modal, setModal] = useState(false);
   const currentList = useAppSelector((state) => state.order.adminOrder);
   const adminOrderCount = useAppSelector((state) => state.order.adminCount);
   const selectedOrder = useAppSelector((state) => state.order.selectedOrder);
-  console.log(selectedOrder);
+
+  const dataPerPage = 10;
+
+  const pageCount = Math.ceil(adminOrderCount / dataPerPage);
+
   const dispatch = useAppDispatch();
 
   const dateFormatter = (date: string) => {
@@ -76,7 +87,6 @@ const Admin: NextPage = (props) => {
       if (res.status == 200) {
         dispatch(setSelectedOrder([]));
       }
-      const response = await res.json();
     }
   };
 
@@ -90,7 +100,7 @@ const Admin: NextPage = (props) => {
         },
       });
       const response = await res.json();
-      console.log(`response:${response}`);
+
       dispatch(setAdminOrder(response.newOrder));
       dispatch(setAdminCount(response.count));
       console.log(currentList);
@@ -100,9 +110,44 @@ const Admin: NextPage = (props) => {
   };
 
   const handleSubmit = (values: adminQuery) => {
-    console.log("in submit");
     handleRequest(values);
+    setFilterValues(values);
   };
+  const fetchData = async (pageNumber: number) => {
+    if (filterValues) {
+      const res = await fetch("http://localhost:3000/api/pagination/orders", {
+        body: JSON.stringify({ pageNumber, ...filterValues }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const response = await res.json();
+      console.log(response);
+      dispatch(setAdminOrder(response));
+    } else {
+      const response = await fetch(
+        "http://localhost:3000/api/pagination/orders?" +
+          new URLSearchParams({
+            page: pageNumber.toString(),
+          })
+      );
+
+      const res = await response.json();
+      console.log(res);
+      dispatch(setAdminOrder(res));
+    }
+  };
+
+  const handlePageClick = async ({ selected }: { selected: number }) => {
+    //total page count 50
+    console.log(selected);
+    //initial page 0 -> 1 -> 2
+    const pageNumber = dataPerPage * selected;
+
+    await fetchData(pageNumber);
+  };
+
   if (session && session?.user?.role == "user") {
     router.push("/");
   }
@@ -152,6 +197,8 @@ const Admin: NextPage = (props) => {
                         value={item}
                         label={item}
                       >
+                        {" "}
+                        store: true,
                         {item}
                       </option>
                     ))}
@@ -247,7 +294,22 @@ const Admin: NextPage = (props) => {
                     confirm
                   </button>
                 </div>
-                <div className="admin-order-list-pagination"></div>
+                <div className="admin-order-list-pagination">
+                  <ReactPaginate
+                    breakLabel="..."
+                    nextLabel={<AiOutlineRight />}
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel={<AiOutlineLeft />}
+                    containerClassName="pagination-btn-wrapper"
+                    pageClassName="pagination-page-btn"
+                    nextLinkClassName="pagination-next-btn"
+                    previousLinkClassName="pagination-prev-btn"
+                    activeLinkClassName="pagination-active-btn"
+                    // renderOnZeroPageCount={null}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -300,17 +362,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           createdAt: "desc",
         },
 
-        take: 12,
-        include: {
-          orderItem: {
-            select: {
-              name: true,
-              quantity: true,
-              unit: true,
-              store: true,
-            },
-          },
-        },
+        take: 10,
       });
       const activeOrderCount = await prisma.order.aggregate({
         _count: true,

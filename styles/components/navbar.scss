@@ -1,14 +1,17 @@
+@use "../base/function.scss" as *;
 .navbar-wrapper {
   height: 80px;
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-
-  width: 70%;
+  width: 80%;
   background-color: #1c1e2b;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
+  @include tablet-landscape-and-below {
+    width: 100%;
+  }
 }
 .navbar {
   display: flex;
@@ -23,6 +26,23 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  &.open-menu {
+    transform: translateX(0);
+  }
+  @include tablet-landscape-and-below {
+    position: absolute;
+    transform: translateX(100%);
+    z-index: 10;
+    width: 50%;
+    top: 0;
+    right: 0;
+    padding-top: 5em;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: #1c1e2b;
+    transition: transform 0.3s ease-in-out;
+    height: 100%;
+  }
 
   & > li {
     padding: 1em 0;
@@ -37,6 +57,7 @@
 }
 
 .login-button {
+  display: initial;
   padding: 0.5em 2em;
   background-color: #ffffff;
   color: #5b628b;
@@ -45,9 +66,14 @@
   border-radius: 5px;
   border: 1px solid darken(#5b628b, 4%);
   box-shadow: 0px 2px 0 darken(#5b628b, 5%), 2px 4px 6px darken(#5b628b, 2%);
+
   transition: all 150ms linear;
+  @include tablet-landscape-and-below {
+    display: none;
+  }
+
   &:hover {
-    background: darken(#5b628b, 1.5%);
+    background: darken(#f6faff, 1.5%);
     border: 1px solid rgba(#000, 0.05);
     box-shadow: 1px 1px 2px rgba(#fff, 0.2);
     color: #b6272b;
@@ -118,6 +144,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  border: 1px solid #f6faff;
 }
 
 .user-panel {

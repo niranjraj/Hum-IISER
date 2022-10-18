@@ -6,23 +6,7 @@ import DatePicker from "react-datepicker";
 import { useAppDispatch } from "../redux/redux-hook";
 import { setActiveOrder, setAdminOrder } from "../redux/order-slice";
 import { useField, useFormikContext } from "formik";
-// type Item = {
-//   name: string;
-//   quantity: number;
-//   store: string;
-// };
-// interface ActiveOrder {
-//   category: string[];
-//   orderItem: Item[];
-//   name: string;
-//   createdAt: string;
-//   active: boolean;
-//   phoneNumber: string;
-//   location: string;
-// }
-// type Props = {
-//   setOrder: Dispatch<ActiveOrder[]>;
-// };
+
 const DateRangePicker = (props: { name: string }) => {
   const { setFieldValue, values } = useFormikContext();
   const [field] = useField(props.name);

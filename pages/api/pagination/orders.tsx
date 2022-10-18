@@ -23,6 +23,8 @@ const adminHandler: NextApiHandler = async (req, res) => {
 
           ...(data.category === "" ? {} : { category: data.category }),
         },
+        skip: data.pageNumber,
+        take: 10,
         ...(!data.dateRange[0] && !data.dateRange[1]
           ? {
               orderBy: {
@@ -31,27 +33,15 @@ const adminHandler: NextApiHandler = async (req, res) => {
             }
           : {}),
       });
-      const activeOrderCount = await prisma.order.aggregate({
-        where: {
-          ...(data.dateRange[0] !== null && data.dateRange[1] !== null
-            ? {
-                createdAt: {
-                  gte: data.dateRange[0],
-                  lte: data.dateRange[1],
-                },
-              }
-            : {}),
 
-          ...(data.category === "" ? {} : { category: data.category }),
-        },
-        _count: true,
+      const newOrder = activeOrder.map(({ userId, createdAt, ...item }) => {
+        return { ...item, createdAt: JSON.stringify(createdAt) };
       });
-      const newOrder = activeOrder.map(({ userId, ...item }) => item);
-      res.status(200).json({ newOrder, count: activeOrderCount._count });
+      res.status(200).json({ newOrder });
     }
     if (req.method == "GET") {
       const page = parseInt(req.query.page as string);
-      console.log;
+      console.log("in request");
 
       const activeOrder = await prisma.order.findMany({
         orderBy: {

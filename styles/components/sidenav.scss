@@ -14,12 +14,18 @@
     justify-content: space-around;
   }
 }
+.hidden-login {
+  display: none;
+  @include tablet-landscape-and-below {
+    display: initial;
+  }
+}
 .side-nav-hamburger {
   display: none;
   @include tablet-landscape-and-below {
     display: inline-block;
     position: relative;
-    z-index: 10;
+    z-index: 20;
     cursor: pointer;
     left: 10%;
     width: 40px;

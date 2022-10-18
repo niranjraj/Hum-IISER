@@ -24,15 +24,20 @@ import {
 
 import { useAppSelector, useAppDispatch } from "../redux/redux-hook";
 
-const Account: NextPage = (props) => {
+const Account: NextPage<{ userId: string }> = (props) => {
   const orderItemRef = useRef<Array<HTMLDivElement | null>>([]);
+  const listInnerRef = useRef<HTMLDivElement | null>(null);
   const { data: session, status } = useSession({ required: true });
   const [orderModal, setOrderModal] = useState<boolean>(false);
-
   const [storeValue, setStoreValue] = useState<string | null>(null);
+
+  const [currPage, setCurrPage] = useState(1); // storing current page number
+  const [prevPage, setPrevPage] = useState(0); // storing prev page numbe
+  const [lastList, setLastList] = useState(false); // setting a flag to know the last list
+
   const activeOrder = useAppSelector((state) => state.order.activeOrder);
   const formData = useAppSelector((state) => state.order.formValue);
-  console.log(activeOrder);
+
   const initialCategory = useAppSelector(
     (state) => state.order.initialCategory
   );
@@ -60,6 +65,7 @@ const Account: NextPage = (props) => {
         },
       });
       const response = await res.json();
+
       console.log(`response:${response}`);
 
       dispatch(updateActiveOrder(response));
@@ -102,6 +108,41 @@ const Account: NextPage = (props) => {
 
     setCurrentStep((prev) => prev - 1);
   };
+  const onScroll = () => {
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        setCurrPage((prev) => prev + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    console.log(currPage);
+    const fetchData = async () => {
+      const response = await fetch(
+        "http://localhost:3000/api/order/pagination?" +
+          new URLSearchParams({
+            userId: props.userId,
+            page: activeOrder.length.toString(),
+          })
+      );
+
+      const res = await response.json();
+      if (!res.length) {
+        setLastList(true);
+        return;
+      }
+      setPrevPage(currPage);
+      console.log(res);
+      dispatch(setActiveOrder([...activeOrder, ...res]));
+    };
+
+    if (!lastList && prevPage !== currPage && currPage > 1) {
+      console.log("in useeffect");
+      fetchData();
+    }
+  }, [currPage, lastList, prevPage, props.userId, activeOrder, dispatch]);
 
   const pages = [
     <OrderPage1
@@ -157,7 +198,11 @@ const Account: NextPage = (props) => {
           </div>
 
           <div className="user-active-order">
-            <div className="active-order-list-wrapper">
+            <div
+              className="active-order-list-wrapper"
+              onScroll={onScroll}
+              ref={listInnerRef}
+            >
               <ul className="active-order-list">
                 {activeOrder.length > 0 &&
                   activeOrder.map((item, index) => {
@@ -271,6 +316,7 @@ const Account: NextPage = (props) => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx: GetServerSidePropsContext) => {
+    let userId = null;
     const session = await getSession(ctx);
 
     let activeData: any = [];
@@ -278,12 +324,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const user = await prisma.user.findUnique({
         where: { email: session.user?.email },
       });
+      userId = user?.id;
 
       const activeOrder = await prisma.order.findMany({
         orderBy: {
           createdAt: "desc",
         },
-        where: { active: true, userId: user?.id },
+        where: { userId: user?.id },
+        take: 10,
 
         include: {
           orderItem: {
@@ -303,7 +351,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     return {
-      props: {},
+      props: { userId },
     };
   }
 );
