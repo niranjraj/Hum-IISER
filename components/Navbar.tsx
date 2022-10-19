@@ -7,7 +7,7 @@ import { redirect } from "next/dist/server/api-utils";
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [menu, setMenu] = useState(false);
-  const [sideMenu, setSideMenu] = useState(false);
+
   const menuRef = useRef<HTMLUListElement | null>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="nav-logo">
           <Image src="/static/humlogo.png" height="47" width="100" alt="Hum" />
         </div>
-        <ul className={`nav-item-wrapper ${sideMenu ? "open-menu" : ""}`}>
+        <ul className={`nav-item-wrapper `}>
           <li>
             <Link href="https://humservices.in/">
               <a>Home</a>
@@ -130,14 +130,14 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        <div
+        {/* <div
           className={`side-nav-hamburger ${sideMenu ? "open-menu" : ""}`}
           onClick={() => setSideMenu((prev) => !prev)}
         >
           <div></div>
           <div></div>
           <div></div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

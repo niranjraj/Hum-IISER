@@ -1,14 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
-import { Item, FormValues, ActiveOrder, InitialCategory } from "../types/order";
+import {
+  AdminOrder,
+  FormValues,
+  ActiveOrder,
+  InitialCategory,
+} from "../types/order";
 
 import { HYDRATE } from "next-redux-wrapper";
 
 interface orderState {
   formValue: FormValues;
   activeOrder: ActiveOrder[];
-  adminOrder: ActiveOrder[];
+  adminOrder: AdminOrder[];
   selectedOrder: string[];
   adminCount: number;
   initialCategory: InitialCategory;
@@ -50,7 +55,7 @@ export const orderSlice = createSlice({
     setSelectedOrder: (state, action: PayloadAction<string[]>) => {
       state.selectedOrder = action.payload;
     },
-    setAdminOrder: (state, action: PayloadAction<ActiveOrder[]>) => {
+    setAdminOrder: (state, action: PayloadAction<AdminOrder[]>) => {
       state.adminOrder = action.payload;
     },
     updateActiveOrder: (state, action: PayloadAction<ActiveOrder>) => {

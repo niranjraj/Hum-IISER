@@ -321,36 +321,6 @@ const Admin: NextPage = (props) => {
   return <div></div>;
 };
 
-// export const getServerSideProps = async () => {
-//   let activeData: any = [];
-
-//   const activeOrder = await prisma.order.findMany({
-//     orderBy: {
-//       createdAt: "desc",
-//     },
-//     take: 10,
-
-//     include: {
-//       orderItem: {
-//         select: {
-//           name: true,
-//           quantity: true,
-//           store: true,
-//         },
-//       },
-//     },
-//   });
-//   activeData = activeOrder;
-
-//   activeData = activeData.map((item) => {
-//     return { ...item, createdAt: JSON.stringify(item.createdAt) };
-//   });
-
-//   return {
-//     props: { activeData },
-//   };
-// };
-
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (ctx: GetServerSidePropsContext) => {
     const session = await getSession(ctx);

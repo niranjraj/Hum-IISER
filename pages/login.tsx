@@ -1,9 +1,19 @@
-import type { NextPage, GetServerSidePropsContext } from "next";
-import { getProviders, signIn } from "next-auth/react";
+import type { NextPage } from "next";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { CgArrowLeft } from "react-icons/cg";
+import { useAppDispatch, useAppSelector } from "../redux/redux-hook";
+import { setErrorSignValue } from "../redux/util-slice";
+
 const Home: NextPage = () => {
+  const dispatch = useAppDispatch();
+  const signError = useAppSelector((state) => state.util.errorSign);
+  const handleSignIn = async () => {
+    const response = await signIn("google", { callbackUrl: "/account" })
+      .then()
+      .catch((err) => dispatch(setErrorSignValue("Sign In Failed")));
+  };
   return (
     <div className="login-container">
       <div className="login-content-wrapper">
@@ -11,10 +21,7 @@ const Home: NextPage = () => {
           <h2>Log in</h2>
           <p>Welcome back! Please sign in to continue</p>
           <div className="login-btn-wrapper">
-            <button
-              className="google-btn"
-              onClick={() => signIn("google", { callbackUrl: "/account" })}
-            >
+            <button className="google-btn" onClick={() => handleSignIn()}>
               <FcGoogle /> <p>Sign in with Google</p>
             </button>
             <Link href="/">
@@ -24,6 +31,7 @@ const Home: NextPage = () => {
               </a>
             </Link>
           </div>
+          {signError && <div className="error-sign-wrapper">{signError}</div>}
         </div>
         <div className="login-img-wrapper"></div>
       </div>

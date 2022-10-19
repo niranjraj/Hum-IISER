@@ -23,6 +23,7 @@ import {
 } from "../redux/order-slice";
 
 import { useAppSelector, useAppDispatch } from "../redux/redux-hook";
+import { setErrorAccountValue } from "../redux/util-slice";
 
 const Account: NextPage<{ userId: string }> = (props) => {
   const orderItemRef = useRef<Array<HTMLDivElement | null>>([]);
@@ -72,8 +73,6 @@ const Account: NextPage<{ userId: string }> = (props) => {
     } catch (error) {
       console.log(error);
     }
-
-    // setActiveOrder((prev) => [response, ...prev]);
   };
 
   const handleNextStep = (newData: FormValues, final = false) => {
@@ -321,33 +320,38 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     let activeData: any = [];
     if (session && session.user?.email) {
-      const user = await prisma.user.findUnique({
-        where: { email: session.user?.email },
-      });
-      userId = user?.id;
+      try {
+        const user = await prisma.user.findUnique({
+          where: { email: session.user?.email },
+        });
+        userId = user?.id;
 
-      const activeOrder = await prisma.order.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        where: { userId: user?.id },
-        take: 10,
+        const activeOrder = await prisma.order.findMany({
+          orderBy: {
+            createdAt: "desc",
+          },
+          where: { userId: user?.id },
+          take: 10,
 
-        include: {
-          orderItem: {
-            select: {
-              name: true,
-              quantity: true,
-              unit: true,
+          include: {
+            orderItem: {
+              select: {
+                name: true,
+                quantity: true,
+                unit: true,
+              },
             },
           },
-        },
-      });
-      activeData = activeOrder.map(({ userId, createdAt, ...rest }) => {
-        return { ...rest, createdAt: JSON.stringify(createdAt) };
-      });
+        });
 
-      store.dispatch(setActiveOrder(activeData));
+        activeData = activeOrder.map(({ userId, createdAt, ...rest }) => {
+          return { ...rest, createdAt: JSON.stringify(createdAt) };
+        });
+
+        store.dispatch(setActiveOrder(activeData));
+      } catch (e) {
+        store.dispatch(setErrorAccountValue("There seems to be a problem"));
+      }
     }
 
     return {

@@ -4,11 +4,13 @@ import type { RootState } from "./store";
 import { Item, FormValues, ActiveOrder, InitialCategory } from "../types/order";
 
 interface utilState {
-  error: string | null;
+  errorSign: string | null;
+  errorAccount: string | null;
 }
 
 const initialState: utilState = {
-  error: null,
+  errorSign: null,
+  errorAccount: null,
 };
 
 export const utilSlice = createSlice({
@@ -16,13 +18,16 @@ export const utilSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setErrorValue: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
+    setErrorSignValue: (state, action: PayloadAction<string>) => {
+      state.errorSign = action.payload;
+    },
+    setErrorAccountValue: (state, action: PayloadAction<string>) => {
+      state.errorAccount = action.payload;
     },
   },
 });
 
-export const { setErrorValue } = utilSlice.actions;
+export const { setErrorSignValue, setErrorAccountValue } = utilSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 

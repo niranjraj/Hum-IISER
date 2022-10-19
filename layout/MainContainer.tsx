@@ -6,8 +6,10 @@ type Props = {
 const MainContainer = (props: Props) => {
   return (
     <>
-      <Navbar />
-      <div className="main-container">{props.children}</div>
+      <div className="main-container">
+        <Navbar />
+        {props.children}
+      </div>
     </>
   );
 };

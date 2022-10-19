@@ -29,6 +29,17 @@ export interface ActiveOrder {
   phoneNumber: string;
   location: string;
 }
+export interface AdminOrder {
+  id: string;
+  category: string;
+
+  name: string;
+  createdAt: string;
+  store: string;
+  active: boolean;
+  phoneNumber: string;
+  location: string;
+}
 export interface Serialized {
   createdAt: string;
   id: string;

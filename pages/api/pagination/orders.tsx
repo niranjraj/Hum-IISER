@@ -1,6 +1,6 @@
 import { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
-import { category } from "../../../utils/initialValues";
+
 import prisma from "../../../utils/prismaInit";
 
 const adminHandler: NextApiHandler = async (req, res) => {

@@ -9,7 +9,7 @@ const activeHandler: NextApiHandler = async (req, res) => {
   if (session) {
     if (req.method == "POST") {
       const data = req.body;
-      console.log(data.selected);
+
       if (data.selected == "confirm") {
         if (data.selectedOrder.length == 1) {
           const updatedActive = await prisma.order.update({
@@ -41,7 +41,6 @@ const activeHandler: NextApiHandler = async (req, res) => {
               active: false,
             },
           });
-          console.log(updatedActive);
 
           res.status(200);
         }
@@ -78,7 +77,6 @@ const activeHandler: NextApiHandler = async (req, res) => {
               paid: true,
             },
           });
-          console.log(updatedActive);
 
           res.status(200);
         }

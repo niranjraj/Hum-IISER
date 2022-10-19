@@ -5,7 +5,14 @@ import DeliveryIcon from "./DeliveryIcon";
 import WhatsappIcon from "./WhatsappIcon";
 import EmailIcon from "./EmailIcon";
 import GmapIcon from "./GmapIcon";
+import { useRouter } from "next/router";
+
+const mailInfo = {
+  id: "1232@gmail.com",
+  subject: "Project or Enquiry",
+};
 const Greeter = () => {
+  const router = useRouter();
   return (
     <div className="greeter-container">
       <div className="greeter-main-content">
@@ -29,13 +36,25 @@ const Greeter = () => {
 
       <div className="contact-container">
         <div className="contact-icon-wrapper">
-          <WhatsappIcon />
+          <Link href={`https://wa.me/+919744990662`}>
+            <a rel="noopener noreferrer" target="_blank">
+              <WhatsappIcon />
+            </a>
+          </Link>
         </div>
         <div className="contact-icon-wrapper">
-          <EmailIcon />
+          <Link href={`mailto:${mailInfo.id}?subject=${mailInfo.subject}`}>
+            <a>
+              <EmailIcon />
+            </a>
+          </Link>
         </div>
         <div className="contact-icon-wrapper">
-          <GmapIcon />
+          <Link href="https://www.google.com/maps/place/HUM+Services/@8.544003,76.941334,16z/data=!4m5!3m4!1s0x0:0xc678b6d2dd551d4c!8m2!3d8.5440035!4d76.9413335?hl=en">
+            <a>
+              <GmapIcon />
+            </a>
+          </Link>
         </div>
       </div>
     </div>

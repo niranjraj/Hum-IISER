@@ -118,15 +118,11 @@ const AdminPreview: NextPage<{ serializedOrder: Serialized }> = (props) => {
               </div>
               <div className="admin-preview-store">
                 <div className="admin-preview-store-name">
-                  {currentPreview.orderItem[0].store}
+                  {currentPreview.store}
                 </div>
                 <Image
                   src={`/static/${currentPreview.category}.png`}
-                  alt={
-                    currentPreview.orderItem[0].store
-                      ? currentPreview.orderItem[0].store
-                      : "store"
-                  }
+                  alt={currentPreview.store ? currentPreview.store : "store"}
                   height="100"
                   width="100"
                 />
@@ -197,7 +193,7 @@ export const getServerSideProps = async (
           select: {
             name: true,
             quantity: true,
-            store: true,
+
             unit: true,
           },
         },
