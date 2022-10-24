@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
-import profilePic from "../public/static/default.jpg";
+import profilePic from "../public/default.jpg";
 import { redirect } from "next/dist/server/api-utils";
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -36,7 +36,7 @@ const Navbar = () => {
     <div className="navbar-wrapper">
       <div className="navbar">
         <div className="nav-logo">
-          <Image src="/static/humlogo.png" height="47" width="100" alt="Hum" />
+          <Image src="/humlogo.png" height="47" width="100" alt="Hum" />
         </div>
         <ul className={`nav-item-wrapper `}>
           <li>

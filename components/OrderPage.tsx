@@ -59,7 +59,7 @@ export const OrderPage1 = (props: OrderProps1) => {
           {props.initialCategory.supermarket ? <BsCheckLg /> : null}
           <p>Supermarket</p>
           <Image
-            src="/static/supermarket.png"
+            src="/supermarket.png"
             width="150"
             height="150"
             className="supermarket-img"
@@ -83,7 +83,7 @@ export const OrderPage1 = (props: OrderProps1) => {
           <p>Restaurant</p>
 
           <Image
-            src="/static/restaurant.png"
+            src="/restaurant.png"
             width="150"
             height="150"
             alt="restaurant"
@@ -129,7 +129,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                     <label>
                       <Field type="radio" name="category" value="Nilgiris" />
                       <Image
-                        src="/static/Nilgiris.png"
+                        src="Nilgiris.png"
                         width="150"
                         height="150"
                         alt="Nilgiris"
@@ -142,7 +142,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                         value="ExoticaStore"
                       />
                       <Image
-                        src="/static/ExoticaStore.png"
+                        src="/ExoticaStore.png"
                         width="150"
                         height="150"
                         alt="ExoticaStore"
@@ -158,7 +158,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                     <label>
                       <Field type="radio" name="category" value="Dominos" />
                       <Image
-                        src="/static/Dominos.png"
+                        src="/Dominos.png"
                         width="150"
                         height="150"
                         alt="Dominos"
@@ -171,7 +171,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                         value="SupremeGourmet"
                       />
                       <Image
-                        src="/static/SupremeGourmet.png"
+                        src="/SupremeGourmet.png"
                         width="150"
                         height="150"
                         alt="Supreme Gourmet"
@@ -184,7 +184,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                         value="PaulsCreamery"
                       />
                       <Image
-                        src="/static/PaulsCreamery.png"
+                        src="/PaulsCreamery.png"
                         width="150"
                         height="150"
                         alt="Paul's Creamery"
@@ -197,7 +197,7 @@ export const OrderPage2 = (props: OrderProps2) => {
                         value="SankersCoffe"
                       />
                       <Image
-                        src="/static/SankersCoffe.png"
+                        src="/SankersCoffe.png"
                         width="150"
                         height="150"
                         alt="Sanker's Coffee"
@@ -209,12 +209,7 @@ export const OrderPage2 = (props: OrderProps2) => {
               <h3>From other stores</h3>
               <label className="other-options">
                 <Field type="radio" name="category" value="Other" />
-                <Image
-                  src="/static/Other.png"
-                  width="150"
-                  height="150"
-                  alt="Other"
-                />
+                <Image src="/Other.png" width="150" height="150" alt="Other" />
               </label>
             </div>
             <div className="form-bottom">
@@ -338,7 +333,7 @@ export const OrderPage3 = (props: OrderProps3) => {
                                   onClick={() => helpers.remove(index)}
                                 >
                                   <Image
-                                    src="/static/icon-delete.svg"
+                                    src="/icon-delete.svg"
                                     alt="delete"
                                     width="16"
                                     height="16"
@@ -428,7 +423,7 @@ export const OrderPage4 = (props: OrderProps4) => {
                           >
                             <p className="summary-item-name">{item.name}</p>
                             <Image
-                              src={`/static/${values.category}.png`}
+                              src={`/${values.category}.png`}
                               width="32"
                               height="32"
                               alt={values.category}
@@ -444,7 +439,7 @@ export const OrderPage4 = (props: OrderProps4) => {
                     <div className="stores-in-order">
                       <div className="summary-store">
                         <Image
-                          src={`/static/${values.category}.png`}
+                          src={`/${values.category}.png`}
                           width="60"
                           height="60"
                           alt={values.category}

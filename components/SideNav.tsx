@@ -1,6 +1,6 @@
 import { useSession, signOut } from "next-auth/react";
 
-import profilePic from "../public/static/default.jpg";
+import profilePic from "../public/default.jpg";
 import React, { useState } from "react";
 import Link from "next/link";
 

@@ -121,7 +121,7 @@ const AdminPreview: NextPage<{ serializedOrder: Serialized }> = (props) => {
                   {currentPreview.store}
                 </div>
                 <Image
-                  src={`/static/${currentPreview.category}.png`}
+                  src={`/${currentPreview.category}.png`}
                   alt={currentPreview.store ? currentPreview.store : "store"}
                   height="100"
                   width="100"

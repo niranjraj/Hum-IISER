@@ -252,7 +252,7 @@ const Account: NextPage<{ userId: string }> = (props) => {
                                         : orderContent.unit
                                     }`}</p>
                                     <Image
-                                      src={`/static/${item.category}.png`}
+                                      src={`/${item.category}.png`}
                                       width="32"
                                       height="32"
                                       alt={item.category}
