@@ -104,7 +104,7 @@ export const OrderPage2 = (props: OrderProps2) => {
       values.orderItem = [];
       props.setStoreValue(null);
     }
-    console.log(values);
+
     props.next(values);
   };
 
@@ -244,7 +244,6 @@ export const OrderPage3 = (props: OrderProps3) => {
     initialOtherValue = { ...props.formData, store: props.formData.category };
   }
   const handleSubmit = (values: FormValues) => {
-    console.log(values);
     props.next(values);
   };
 

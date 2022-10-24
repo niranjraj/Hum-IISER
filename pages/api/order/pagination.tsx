@@ -35,7 +35,6 @@ const pagination: NextApiHandler = async (req, res) => {
           return { ...rest, createdAt: JSON.stringify(createdAt) };
         });
 
-        console.log(activeData);
         res.status(200).json(activeData);
       }
     }

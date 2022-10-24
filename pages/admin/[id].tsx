@@ -18,7 +18,7 @@ const AdminPreview: NextPage<{ serializedOrder: Serialized }> = (props) => {
   const { data: session, status } = useSession({ required: true });
   const [modal, setModal] = useState(false);
   const [currentPreview, setCurrentPreview] = useState(props.serializedOrder);
-  console.log(currentPreview.paid);
+
   const router = useRouter();
   const handleRequest = async (handleKey: string) => {
     const res = await fetch("http://localhost:3000/api/order/active", {

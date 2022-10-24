@@ -1,7 +1,6 @@
 import { NextApiHandler } from "next";
 import { getSession } from "next-auth/react";
 import prisma from "../../../utils/prismaInit";
-import { formatISO } from "date-fns";
 
 const orderHandler: NextApiHandler = async (req, res) => {
   const session = await getSession({ req });

@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+
 import Link from "next/link";
 import DeliveryIcon from "./DeliveryIcon";
 import WhatsappIcon from "./WhatsappIcon";

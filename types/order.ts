@@ -19,6 +19,7 @@ export interface FormValues {
   location: string;
 }
 export interface ActiveOrder {
+  item: any;
   id: string;
   category: string;
   orderItem: Item[];

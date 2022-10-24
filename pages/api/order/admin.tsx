@@ -51,7 +51,6 @@ const adminHandler: NextApiHandler = async (req, res) => {
     }
     if (req.method == "GET") {
       const page = parseInt(req.query.page as string);
-      console.log;
 
       const activeOrder = await prisma.order.findMany({
         orderBy: {

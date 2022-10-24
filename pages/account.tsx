@@ -37,6 +37,7 @@ const Account: NextPage<{ userId: string }> = (props) => {
   const [lastList, setLastList] = useState(false); // setting a flag to know the last list
 
   const activeOrder = useAppSelector((state) => state.order.activeOrder);
+  const accountError = useAppSelector((state) => state.util.errorAccount);
   const formData = useAppSelector((state) => state.order.formValue);
 
   const initialCategory = useAppSelector(
@@ -54,7 +55,6 @@ const Account: NextPage<{ userId: string }> = (props) => {
     } else {
       item[index]?.classList.add("active-open");
     }
-    console.log();
   };
   const handleRequest = async (formValues: FormValues) => {
     try {
@@ -67,11 +67,9 @@ const Account: NextPage<{ userId: string }> = (props) => {
       });
       const response = await res.json();
 
-      console.log(`response:${response}`);
-
       dispatch(updateActiveOrder(response));
     } catch (error) {
-      console.log(error);
+      dispatch(setErrorAccountValue("Failed order didn't go through"));
     }
   };
 
@@ -117,29 +115,31 @@ const Account: NextPage<{ userId: string }> = (props) => {
   };
 
   useEffect(() => {
-    console.log(currPage);
-    const fetchData = async () => {
-      const response = await fetch(
-        "http://localhost:3000/api/order/pagination?" +
-          new URLSearchParams({
-            userId: props.userId,
-            page: activeOrder.length.toString(),
-          })
-      );
+    try {
+      const fetchData = async () => {
+        const response = await fetch(
+          "http://localhost:3000/api/order/pagination?" +
+            new URLSearchParams({
+              userId: props.userId,
+              page: activeOrder.length.toString(),
+            })
+        );
 
-      const res = await response.json();
-      if (!res.length) {
-        setLastList(true);
-        return;
+        const res = await response.json();
+        if (!res.length) {
+          setLastList(true);
+          return;
+        }
+        setPrevPage(currPage);
+
+        dispatch(setActiveOrder([...activeOrder, ...res]));
+      };
+
+      if (!lastList && prevPage !== currPage && currPage > 1) {
+        fetchData();
       }
-      setPrevPage(currPage);
-      console.log(res);
-      dispatch(setActiveOrder([...activeOrder, ...res]));
-    };
-
-    if (!lastList && prevPage !== currPage && currPage > 1) {
-      console.log("in useeffect");
-      fetchData();
+    } catch (err) {
+      dispatch(setErrorAccountValue("Failed to fetch resources"));
     }
   }, [currPage, lastList, prevPage, props.userId, activeOrder, dispatch]);
 
@@ -188,6 +188,10 @@ const Account: NextPage<{ userId: string }> = (props) => {
     return (
       <div className="account-container">
         <SideNav />
+        {accountError && (
+          <div className="error-sign-wrapper">{accountError}</div>
+        )}
+
         <div className="account-content">
           <div className="account-header">
             <h2>My Orders</h2>

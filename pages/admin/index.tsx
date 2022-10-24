@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import SideNav from "../../components/SideNav";
 import prisma from "../../utils/prismaInit";
 import { MdPending } from "react-icons/md";
+
 import {
   AiFillCheckCircle,
   AiOutlineRight,
@@ -27,6 +28,10 @@ import { category } from "../../utils/initialValues";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import Loader from "../../components/Loader";
+
+import { createDoc } from "../../utils/documentGenerator";
+import { setErrorAdminValue } from "../../redux/util-slice";
 
 const initialValue = {
   dateRange: [null, null],
@@ -37,17 +42,20 @@ interface adminQuery {
   dateRange: Date[] | null[];
   category: string;
 }
+
 const Admin: NextPage = (props) => {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
   const [filterValues, setFilterValues] = useState<adminQuery | null>(null);
-  const listInnerRef = useRef<HTMLUListElement | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [disabel, setDisabled] = useState(false);
+
   const [checkAll, setCheckAll] = useState(false);
   const [modal, setModal] = useState(false);
   const currentList = useAppSelector((state) => state.order.adminOrder);
   const adminOrderCount = useAppSelector((state) => state.order.adminCount);
   const selectedOrder = useAppSelector((state) => state.order.selectedOrder);
-
+  const adminError = useAppSelector((state) => state.util.errorAdmin);
   const dataPerPage = 10;
 
   const pageCount = Math.ceil(adminOrderCount / dataPerPage);
@@ -57,6 +65,7 @@ const Admin: NextPage = (props) => {
   const dateFormatter = (date: string) => {
     return moment(date.split("T")[0], "YYYY-MM-DD").format("DD MMM YYYY");
   };
+
   const handleSelectAll = () => {
     setCheckAll((prev) => !prev);
     dispatch(setSelectedOrder(currentList.map((li) => li.id)));
@@ -74,23 +83,28 @@ const Admin: NextPage = (props) => {
     }
   };
   const handleSelected = async (handleKey: string) => {
-    if (selectedOrder.length < 1) {
-      return;
-    } else {
-      const res = await fetch("http://localhost:3000/api/order/active", {
-        body: JSON.stringify({ selectedOrder, selected: handleKey }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (res.status == 200) {
-        dispatch(setSelectedOrder([]));
+    try {
+      if (selectedOrder.length < 1) {
+        return;
+      } else {
+        const res = await fetch("http://localhost:3000/api/order/active", {
+          body: JSON.stringify({ selectedOrder, selected: handleKey }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status == 200) {
+          dispatch(setSelectedOrder([]));
+        }
       }
+    } catch (err) {
+      dispatch(setErrorAdminValue("Failed try again"));
     }
   };
 
   const handleRequest = async (values: adminQuery) => {
+    setLoading(true);
     try {
       const res = await fetch("http://localhost:3000/api/order/admin", {
         body: JSON.stringify(values),
@@ -103,9 +117,10 @@ const Admin: NextPage = (props) => {
 
       dispatch(setAdminOrder(response.newOrder));
       dispatch(setAdminCount(response.count));
-      console.log(currentList);
     } catch (error) {
-      console.log(error);
+      dispatch(setErrorAdminValue("Can't fetch resources"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,36 +128,60 @@ const Admin: NextPage = (props) => {
     handleRequest(values);
     setFilterValues(values);
   };
+  const handleDownload = async () => {
+    setDisabled(true);
+    try {
+      if (filterValues) {
+        const res = await fetch("http://localhost:3000/api/order/download", {
+          body: JSON.stringify(filterValues),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const response = await res.json();
+        await createDoc(response.newOrder);
+      }
+    } catch (err) {
+      dispatch(setErrorAdminValue("An error occured"));
+    } finally {
+      setDisabled(false);
+    }
+  };
   const fetchData = async (pageNumber: number) => {
-    if (filterValues) {
-      const res = await fetch("http://localhost:3000/api/pagination/orders", {
-        body: JSON.stringify({ pageNumber, ...filterValues }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const response = await res.json();
-      console.log(response);
-      dispatch(setAdminOrder(response));
-    } else {
-      const response = await fetch(
-        "http://localhost:3000/api/pagination/orders?" +
-          new URLSearchParams({
-            page: pageNumber.toString(),
-          })
-      );
+    setLoading(true);
+    try {
+      if (filterValues) {
+        const res = await fetch("http://localhost:3000/api/pagination/orders", {
+          body: JSON.stringify({ pageNumber, ...filterValues }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const response = await res.json();
 
-      const res = await response.json();
-      console.log(res);
-      dispatch(setAdminOrder(res));
+        dispatch(setAdminOrder(response.newOrder));
+      } else {
+        const response = await fetch(
+          "http://localhost:3000/api/pagination/orders?" +
+            new URLSearchParams({
+              page: pageNumber.toString(),
+            })
+        );
+
+        const res = await response.json();
+
+        dispatch(setAdminOrder(res));
+      }
+    } catch (err) {
+      dispatch(setErrorAdminValue("can't fetch resources"));
+    } finally {
+      setLoading(false);
     }
   };
 
   const handlePageClick = async ({ selected }: { selected: number }) => {
-    //total page count 50
-    console.log(selected);
-    //initial page 0 -> 1 -> 2
     const pageNumber = dataPerPage * selected;
 
     await fetchData(pageNumber);
@@ -156,6 +195,7 @@ const Admin: NextPage = (props) => {
       <div className="admin-container">
         <SideNav />
         <div className="admin-content-wrapper">
+          {adminError && <div className="error-sign-wrapper">{adminError}</div>}
           {modal && (
             <div className="modal-wrapper">
               <div className="modal-container">
@@ -230,7 +270,9 @@ const Admin: NextPage = (props) => {
                 <div className="admin-header-store">stores</div>
               </div>
               <ul className="admin-order-list-content">
-                {currentList &&
+                {loading ? (
+                  <Loader />
+                ) : currentList ? (
                   currentList.map((item, index) => {
                     return (
                       <div key={item.id} className="admin-order-list-item">
@@ -280,7 +322,10 @@ const Admin: NextPage = (props) => {
                         </div>
                       </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <Loader />
+                )}
               </ul>
               <div className="admin-order-list-footer">
                 <div className="admin-order-count">
@@ -292,6 +337,9 @@ const Admin: NextPage = (props) => {
                   <button onClick={() => setModal(true)}>Payment</button>
                   <button onClick={() => handleSelected("confirm")}>
                     confirm
+                  </button>
+                  <button disabled={disabel} onClick={() => handleDownload()}>
+                    Download
                   </button>
                 </div>
                 <div className="admin-order-list-pagination">
