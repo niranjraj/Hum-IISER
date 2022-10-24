@@ -58,7 +58,7 @@ const Account: NextPage<{ userId: string }> = (props) => {
   };
   const handleRequest = async (formValues: FormValues) => {
     try {
-      const res = await fetch("http://localhost:3000/api/order", {
+      const res = await fetch(`${process.env.NEXTAUTH_URL}api/order`, {
         body: JSON.stringify(formValues),
         method: "POST",
         headers: {
@@ -118,7 +118,7 @@ const Account: NextPage<{ userId: string }> = (props) => {
     try {
       const fetchData = async () => {
         const response = await fetch(
-          "http://localhost:3000/api/order/pagination?" +
+          `${process.env.NEXTAUTH_URL}/api/order/pagination?` +
             new URLSearchParams({
               userId: props.userId,
               page: activeOrder.length.toString(),

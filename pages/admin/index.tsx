@@ -87,13 +87,16 @@ const Admin: NextPage = (props) => {
       if (selectedOrder.length < 1) {
         return;
       } else {
-        const res = await fetch("http://localhost:3000/api/order/active", {
-          body: JSON.stringify({ selectedOrder, selected: handleKey }),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/order/active`,
+          {
+            body: JSON.stringify({ selectedOrder, selected: handleKey }),
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (res.status == 200) {
           dispatch(setSelectedOrder([]));
         }
@@ -106,7 +109,7 @@ const Admin: NextPage = (props) => {
   const handleRequest = async (values: adminQuery) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/api/order/admin", {
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/order/admin`, {
         body: JSON.stringify(values),
         method: "POST",
         headers: {
@@ -132,13 +135,16 @@ const Admin: NextPage = (props) => {
     setDisabled(true);
     try {
       if (filterValues) {
-        const res = await fetch("http://localhost:3000/api/order/download", {
-          body: JSON.stringify(filterValues),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/order/download`,
+          {
+            body: JSON.stringify(filterValues),
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const response = await res.json();
         await createDoc(response.newOrder);
       }
@@ -152,19 +158,22 @@ const Admin: NextPage = (props) => {
     setLoading(true);
     try {
       if (filterValues) {
-        const res = await fetch("http://localhost:3000/api/pagination/orders", {
-          body: JSON.stringify({ pageNumber, ...filterValues }),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/pagination/orders`,
+          {
+            body: JSON.stringify({ pageNumber, ...filterValues }),
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const response = await res.json();
 
         dispatch(setAdminOrder(response.newOrder));
       } else {
         const response = await fetch(
-          "http://localhost:3000/api/pagination/orders?" +
+          ` ${process.env.NEXTAUTH_URL}/api/pagination/orders?` +
             new URLSearchParams({
               page: pageNumber.toString(),
             })

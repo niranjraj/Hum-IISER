@@ -21,7 +21,7 @@ const AdminPreview: NextPage<{ serializedOrder: Serialized }> = (props) => {
 
   const router = useRouter();
   const handleRequest = async (handleKey: string) => {
-    const res = await fetch("http://localhost:3000/api/order/active", {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/order/active`, {
       body: JSON.stringify({
         selectedOrder: [currentPreview.id],
         selected: handleKey,
