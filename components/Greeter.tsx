@@ -8,8 +8,8 @@ import GmapIcon from "./GmapIcon";
 import { useRouter } from "next/router";
 
 const mailInfo = {
-  id: "1232@gmail.com",
-  subject: "Project or Enquiry",
+  id: "reachus@humservices.org",
+  subject: "Enquiry or Issue",
 };
 const Greeter = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const Greeter = () => {
 
       <div className="contact-container">
         <div className="contact-icon-wrapper">
-          <Link href={`https://wa.me/+919744990662`}>
+          <Link href={`https://wa.me/+919400200462`}>
             <a rel="noopener noreferrer" target="_blank">
               <WhatsappIcon />
             </a>
