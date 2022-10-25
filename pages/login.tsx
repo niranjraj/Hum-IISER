@@ -10,9 +10,10 @@ const Home: NextPage = () => {
   const dispatch = useAppDispatch();
   const signError = useAppSelector((state) => state.util.errorSign);
   const handleSignIn = async () => {
+    console.log("loging in");
     const response = await signIn("google", { callbackUrl: "/account" })
       .then()
-      .catch((err) => dispatch(setErrorSignValue("Sign In Failed")));
+      .catch((err) => dispatch(setErrorSignValue("Sign in Failed")));
   };
   return (
     <div className="login-container">
