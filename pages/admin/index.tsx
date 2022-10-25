@@ -1,6 +1,6 @@
 import type { GetServerSidePropsContext, NextPage } from "next";
 import { getSession, useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import SideNav from "../../components/SideNav";
 import prisma from "../../utils/prismaInit";
 import { MdPending } from "react-icons/md";

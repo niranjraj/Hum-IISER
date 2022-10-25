@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import Image from "next/image";
-import * as yup from "yup";
+
 import "yup-phone-lite";
 import Input from "./Input";
 import formErrorMsg from "../utils/errorMessage";

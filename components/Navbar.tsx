@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import profilePic from "../public/default.jpg";
-import { redirect } from "next/dist/server/api-utils";
+
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [menu, setMenu] = useState(false);
