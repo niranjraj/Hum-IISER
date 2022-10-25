@@ -1,0 +1,17 @@
+{
+  "projectName": "humiiser",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": ".next",
+      "BuildCommand": "yarn run vercel-build",
+      "StartCommand": "yarn run start"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}
