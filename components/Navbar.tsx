@@ -69,21 +69,27 @@ const Navbar = () => {
 
             <ul className="sub-menu">
               <li>
-                <Link href="#">Home Services</Link>
+                <Link href="https://humservices.in/home-services/">
+                  Home Services
+                </Link>
               </li>
               <li>
-                <Link href="#">Delivery Services</Link>
+                <Link href="https://humservices.in/delivery-services/">
+                  Delivery Services
+                </Link>
               </li>
               <li>
-                <Link href="#">Deep Cleaning</Link>
+                <Link href="https://humservices.in/deepcleaning/">
+                  Deep Cleaning
+                </Link>
               </li>
               <li>
-                <Link href="#">Life Art</Link>
+                <Link href="https://humservices.in/lifeart/">Life Art</Link>
               </li>
             </ul>
           </li>
           <li>
-            <Link href="#">
+            <Link href="https://humservices.in/contact/">
               <a>Contact</a>
             </Link>
           </li>
