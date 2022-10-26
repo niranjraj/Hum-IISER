@@ -1,41 +1,20 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-humiiser-dev-223139-authRole",
-      "UnauthRoleArn": "arn:aws:iam::478398335532:role/amplify-humiiser-dev-223139-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::478398335532:role/amplify-humiiser-dev-223139-authRole",
+      "AuthRoleName": "amplify-humiiser-dev-84015-authRole",
+      "UnauthRoleArn": "arn:aws:iam::478398335532:role/amplify-humiiser-dev-84015-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::478398335532:role/amplify-humiiser-dev-84015-authRole",
       "Region": "ap-northeast-1",
-      "DeploymentBucketName": "amplify-humiiser-dev-223139-deployment",
-      "UnauthRoleName": "amplify-humiiser-dev-223139-unauthRole",
-      "StackName": "amplify-humiiser-dev-223139",
-      "StackId": "arn:aws:cloudformation:ap-northeast-1:478398335532:stack/amplify-humiiser-dev-223139/b2b0de80-5486-11ed-bd83-0ac6edd532f5",
-      "AmplifyAppId": "d5isfycbu4517"
+      "DeploymentBucketName": "amplify-humiiser-dev-84015-deployment",
+      "UnauthRoleName": "amplify-humiiser-dev-84015-unauthRole",
+      "StackName": "amplify-humiiser-dev-84015",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:478398335532:stack/amplify-humiiser-dev-84015/b8b4efb0-54db-11ed-b233-0a3078322733",
+      "AmplifyAppId": "d1ynrkmwprmepc"
     },
     "categories": {
       "hosting": {
         "amplifyhosting": {
-          "appId": "d5isfycbu4517",
-          "type": "cicd"
-        }
-      }
-    }
-  },
-  "awshum": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-humiiser-awshum-61003-authRole",
-      "UnauthRoleArn": "arn:aws:iam::478398335532:role/amplify-humiiser-awshum-61003-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::478398335532:role/amplify-humiiser-awshum-61003-authRole",
-      "Region": "ap-northeast-1",
-      "DeploymentBucketName": "amplify-humiiser-awshum-61003-deployment",
-      "UnauthRoleName": "amplify-humiiser-awshum-61003-unauthRole",
-      "StackName": "amplify-humiiser-awshum-61003",
-      "StackId": "arn:aws:cloudformation:ap-northeast-1:478398335532:stack/amplify-humiiser-awshum-61003/bc4a5800-54c6-11ed-861c-0ea9a8da462f",
-      "AmplifyAppId": "d5isfycbu4517"
-    },
-    "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d5isfycbu4517",
+          "appId": "d1ynrkmwprmepc",
           "type": "cicd"
         }
       }

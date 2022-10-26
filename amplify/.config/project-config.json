@@ -6,9 +6,9 @@
     "framework": "react",
     "config": {
       "SourceDir": "src",
-      "DistributionDir": ".next",
-      "BuildCommand": "yarn run vercel-build",
-      "StartCommand": "yarn run start"
+      "DistributionDir": "build",
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "npm run-script start"
     }
   },
   "providers": [
